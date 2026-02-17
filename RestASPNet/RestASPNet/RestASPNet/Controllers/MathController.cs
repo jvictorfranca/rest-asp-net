@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RestASPNet.Services;
+using RestASPNet.Utils;
+using System.Runtime.CompilerServices;
 
 namespace RestASPNet.Controllers
 {
@@ -6,13 +9,21 @@ namespace RestASPNet.Controllers
     [Route("[controller]")]
     public class MathController : ControllerBase
     {
-        [HttpGet("sum/{firstNumber}/{secondNumber}")]
-        public IActionResult Get(string firstNumber, string secondNumber)
+        private readonly MathService _service;
+
+        public MathController(MathService service)
         {
-            if(IsNumeric(firstNumber) && IsNumeric(secondNumber))
+            _service = service;
+        }
+
+        [HttpGet("sum/{firstNumber}/{secondNumber}")]
+        public IActionResult GetSum(string firstNumber, string secondNumber)
+        {
+
+            if(NumberHelper.IsNumeric(firstNumber) && NumberHelper.IsNumeric(secondNumber))
             {
 
-            var sum = ConvertToDecimal(firstNumber) + ConvertToDecimal(secondNumber);
+            var sum = _service.sum(NumberHelper.ConvertToDecimal(firstNumber) , NumberHelper.ConvertToDecimal(secondNumber));
             return Ok(sum);
 
             } else
@@ -21,32 +32,85 @@ namespace RestASPNet.Controllers
             }
         }
 
-        private decimal ConvertToDecimal(string numberString)
+        [HttpGet("sub/{firstNumber}/{secondNumber}")]
+        public IActionResult GetSub(string firstNumber, string secondNumber)
         {
-            decimal decimalValue;
-            if (decimal.TryParse(
-                numberString,
-                System.Globalization.NumberStyles.Any,
-                System.Globalization.NumberFormatInfo.InvariantInfo,
-                out decimalValue))
+            if (NumberHelper.IsNumeric(firstNumber) && NumberHelper.IsNumeric(secondNumber))
             {
-                return decimalValue;
+
+                var sub = _service.sub(NumberHelper.ConvertToDecimal(firstNumber), NumberHelper.ConvertToDecimal(secondNumber));
+                return Ok(sub);
+
             }
-            else 
+            else
             {
-                return 0; 
+                return BadRequest("Invalid Input");
             }
         }
 
-        private bool IsNumeric(string stringNumber)
+        [HttpGet("div/{firstNumber}/{secondNumber}")]
+        public IActionResult GetDiv(string firstNumber, string secondNumber)
         {
-            decimal decimalNumber = 0;
-            bool isNumber = decimal.TryParse(
-                stringNumber,
-                System.Globalization.NumberStyles.Any,
-                System.Globalization.NumberFormatInfo.InvariantInfo,
-                out decimalNumber);
-            return isNumber;
+            if (NumberHelper.IsNumeric(firstNumber) && NumberHelper.IsNumeric(secondNumber))
+            {
+
+                var div = _service.div(NumberHelper.ConvertToDecimal(firstNumber),NumberHelper.ConvertToDecimal(secondNumber));
+                return Ok(div);
+
+            }
+            else
+            {
+                return BadRequest("Invalid Input");
+            }
+        }
+
+        [HttpGet("mult/{firstNumber}/{secondNumber}")]
+        public IActionResult GetMult(string firstNumber, string secondNumber)
+        {
+            if (NumberHelper.IsNumeric(firstNumber) && NumberHelper.IsNumeric(secondNumber))
+            {
+
+                var mult = _service.mult(NumberHelper.ConvertToDecimal(firstNumber), NumberHelper.ConvertToDecimal(secondNumber));
+                return Ok(mult);
+
+            }
+            else
+            {
+                return BadRequest("Invalid Input");
+            }
+        }
+
+
+        [HttpGet("root/{firstNumber}")]
+        public IActionResult GetRoot(string firstNumber)
+        {
+            if (NumberHelper.IsNumeric(firstNumber))
+            {
+
+                var root = _service.root(NumberHelper.ConvertToDecimal(firstNumber));
+                return Ok(root);
+
+            }
+            else
+            {
+                return BadRequest("Invalid Input");
+            }
+        }
+
+        [HttpGet("avg/{firstNumber}/{secondNumber}")]
+        public IActionResult GetAvg(string firstNumber, string secondNumber)
+        {
+            if (NumberHelper.IsNumeric(firstNumber) && NumberHelper.IsNumeric(secondNumber))
+            {
+
+                var avg = _service.avg(NumberHelper.ConvertToDecimal(firstNumber), NumberHelper.ConvertToDecimal(secondNumber));
+                return Ok(avg);
+
+            }
+            else
+            {
+                return BadRequest("Invalid Input");
+            }
         }
     }
 }
