@@ -1,3 +1,4 @@
+using RestASPNet.Configurations;
 using RestASPNet.Services;
 using RestASPNet.Services.Impl;
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddDatabaseConfiguration(builder.Configuration);
 
 builder.Services.AddSingleton<MathService>();
 builder.Services.AddScoped<IPersonServices, PersonServicesImpl>();
