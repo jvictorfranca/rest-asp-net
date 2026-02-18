@@ -1,50 +1,53 @@
 ﻿using RestASPNet.Controllers.Model;
+using RestASPNet.Controllers.Model.Context;
 
 namespace RestASPNet.Services.Impl
 {
     public class PersonServicesImpl : IPersonServices
     {
+
+        private MSSQLContext _context;
+
+        public PersonServicesImpl(MSSQLContext context)
+        {
+            _context = context;
+        }
+
         public List<Person> FindAll()
         {
-            List<Person> persons = new List<Person>();
-            for(int i = 0; i<8; i++)
-            {
-                persons.Add(MockPerson(i));
-            }
-            return persons;
+       
+
+            return _context.Persons.ToList();
         }
 
         public Person FindById(long id)
         {
-            var person = MockPerson((int) id);
+            var person = _context.Persons.Find(id);
 
             return person;
-        }
-
-        private Person MockPerson(int i)
-        {
-            return new Person
-            {
-                Id = new Random().Next(1, 1000),
-                FirstName = "Leandro " + i,
-                LastName = "Costa " + i,
-                Adress = "Rua dos Bobos, nº " + i,
-                Gender = i % 2 == 0 ? "Male" : "Female"
-            };
         }
 
         public Person Create(Person person)
         {
+            person = _context.Add(person).Entity;
+            _context.SaveChanges();
             return person;
         }
         public Person Update(Person person)
         {
+            var existingPerson = _context.Persons.Find(person.Id);
+            if (existingPerson == null) return null;
+            _context.Entry(existingPerson).CurrentValues.SetValues(person);
+            _context.SaveChanges();
             return person;
         }
 
         public void Delete(long id)
         {
-            // No content
+            var existingPerson = _context.Persons.Find(id);
+            if (existingPerson == null) return;
+            _context.Remove(existingPerson);
+            _context.SaveChanges();
         }
 
 

@@ -9,7 +9,7 @@ namespace RestASPNet.Controllers.Model
         [Key]
         [Column("id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public long Id { get; set; }
         [Required]
         [Column("first_name", TypeName ="varchar(80)")]
         [MaxLength(80)]
