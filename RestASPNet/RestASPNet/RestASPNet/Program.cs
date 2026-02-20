@@ -1,6 +1,8 @@
 using RestASPNet.Configurations;
 using RestASPNet.Services;
+using RestASPNet.Repositories;
 using RestASPNet.Services.Impl;
+using RestASPNet.Repositories.Impl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,8 @@ builder.Services.AddDatabaseConfiguration(builder.Configuration);
 
 builder.Services.AddSingleton<MathService>();
 builder.Services.AddScoped<IPersonServices, PersonServicesImpl>();
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+
 
 var app = builder.Build();
 
