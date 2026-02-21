@@ -31,6 +31,7 @@ namespace RestASPNet.Configurations
                     throw;
                 }
             }
+                return services;
         }
     }
 }
