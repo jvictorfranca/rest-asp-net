@@ -1,8 +1,8 @@
 ﻿using RestASPNet.Controllers.Model;
 
-namespace RestASPNet.Repositories
+namespace RestASPNet.OldFiles.Repositories
 {
-    public interface IBookRepository
+    public interface IBookRepository_BeforeGeneric
     {
 
         Book Create(Book Book);

@@ -1,4 +1,5 @@
 ﻿using RestASPNet.Controllers.Model;
+using RestASPNet.OldFiles.Repositories;
 using RestASPNet.Repositories;
 using RestASPNet.Repositories.Impl;
 
@@ -7,9 +8,9 @@ namespace RestASPNet.Services.Impl
     public class BookServicesImpl : IBookServices
     {
 
-        private readonly IBookRepository _repository;
+        private readonly IRepository<Book> _repository;
 
-        public BookServicesImpl(IBookRepository repository)
+        public BookServicesImpl(IRepository<Book> repository)
         {
             _repository = repository;
         }

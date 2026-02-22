@@ -1,13 +1,13 @@
 ﻿using RestASPNet.Controllers.Model;
 using RestASPNet.Controllers.Model.Context;
 
-namespace RestASPNet.Repositories.Impl
+namespace RestASPNet.OldFiles.Repositories.Impl
 {
-    public class BookRepository : IBookRepository
+    public class BookRepository_BeforeGeneric : IBookRepository_BeforeGeneric
     {
         private MSSQLContext _context;
 
-        public BookRepository(MSSQLContext context)
+        public BookRepository_BeforeGeneric(MSSQLContext context)
         {
             _context = context;
         }
@@ -26,19 +26,19 @@ namespace RestASPNet.Repositories.Impl
             return Book;
         }
 
-        public Book Create(Book Book)
+        public Book Create(Book book)
         {
-            Book = _context.Add(Book).Entity;
+            book = _context.Add(book).Entity;
             _context.SaveChanges();
-            return Book;
+            return book;
         }
-        public Book Update(Book Book)
+        public Book Update(Book book)
         {
-            var existingBook = _context.Books.Find(Book.Id);
+            var existingBook = _context.Books.Find(book.Id);
             if (existingBook == null) return null;
-            _context.Entry(existingBook).CurrentValues.SetValues(Book);
+            _context.Entry(existingBook).CurrentValues.SetValues(book);
             _context.SaveChanges();
-            return Book;
+            return book;
         }
 
         public void Delete(long id)

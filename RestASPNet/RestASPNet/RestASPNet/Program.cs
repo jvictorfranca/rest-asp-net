@@ -17,11 +17,12 @@ builder.Services.AddEvolveConfiguration(builder.Configuration, builder.Environme
 builder.Services.AddSingleton<MathService>();
 
 builder.Services.AddScoped<IPersonServices, PersonServicesImpl>();
-builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 
 builder.Services.AddScoped<IBookServices, BookServicesImpl>();
-builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
+// builder.Services.AddScoped<IPersonRepository, PersonRepository>();// Before generic repository
+// builder.Services.AddScoped<IBookRepository, BookRepository>(); // Before generic repository
 
 var app = builder.Build();
 

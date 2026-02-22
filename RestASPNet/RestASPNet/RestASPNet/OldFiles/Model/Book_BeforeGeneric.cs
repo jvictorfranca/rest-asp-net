@@ -4,8 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace RestASPNet.Controllers.Model
 {
     [Table("books")]
-    public class Book : Base.BaseEntity
+    public class Book_BeforeGeneric
     {
+        [Key]
+        [Column("id")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Id { get; set; }
         [Required]
         [Column("title", TypeName ="varchar(80)")]
         [MaxLength(80)]
