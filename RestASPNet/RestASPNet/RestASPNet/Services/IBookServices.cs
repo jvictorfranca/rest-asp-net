@@ -4,10 +4,10 @@ namespace RestASPNet.Services
 {
     public interface IBookServices
     {
-        Book Create(Book book);
-        Book FindById(long id);
-        List<Book> FindAll();
-        Book Update(Book book);
+        BookDTO Create(BookDTO book);
+        BookDTO FindById(long id);
+        List<BookDTO> FindAll();
+        BookDTO Update(BookDTO book);
         void Delete(long id);
     }
 }

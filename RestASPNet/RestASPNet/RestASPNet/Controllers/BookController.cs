@@ -40,29 +40,29 @@ namespace RestASPNet.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Book Book)
+        public IActionResult Post([FromBody] BookDTO book)
          {
-            _logger.LogInformation("Creating new Book {title}", Book.Title);
-            var createdBook = _BookServices.Create(Book);
+            _logger.LogInformation("Creating new Book {title}", book.Title);
+            var createdBook = _BookServices.Create(book);
             if (createdBook == null)
             {
-                _logger.LogError("Failed to create Book {title}", Book.Title);
+                _logger.LogError("Failed to create Book {title}", book.Title);
                 return NotFound();
             }
             return Ok(createdBook);
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody] Book Book)
+        public IActionResult Put([FromBody] BookDTO book)
         {
-            _logger.LogInformation("Updating Book with ID {id}", Book.Id);
-            var createdBook = _BookServices.Update(Book);
+            _logger.LogInformation("Updating Book with ID {id}", book.Id);
+            var createdBook = _BookServices.Update(book);
             if (createdBook == null)
             {
-                _logger.LogError("Book with ID {id} not found for update", Book.Id);
+                _logger.LogError("Book with ID {id} not found for update", book.Id);
                 return NotFound();
             }
-            _logger.LogDebug("Book with ID {id} updated successfully", Book.Id);
+            _logger.LogDebug("Book with ID {id} updated successfully", book.Id);
             return Ok(createdBook);
         }
 

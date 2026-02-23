@@ -40,7 +40,7 @@ namespace RestASPNet.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Person person)
+        public IActionResult Post([FromBody] PersonDTO person)
          {
             _logger.LogInformation("Creating new person {firstName}", person.FirstName);
             var createdPerson = _personServices.Create(person);
@@ -53,7 +53,7 @@ namespace RestASPNet.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody] Person person)
+        public IActionResult Put([FromBody] PersonDTO person)
         {
             _logger.LogInformation("Updating person with ID {id}", person.Id);
             var createdPerson = _personServices.Update(person);

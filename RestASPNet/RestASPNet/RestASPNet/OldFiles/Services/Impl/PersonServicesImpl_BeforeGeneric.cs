@@ -46,7 +46,25 @@ namespace RestASPNet.OldFiles.Services.Impl
                 _repository.Delete(id);
             }
 
+            public PersonDTO Create(PersonDTO person)
+            {
+                throw new NotImplementedException();
+            }
 
+            PersonDTO IPersonServices.FindById(long id)
+            {
+                throw new NotImplementedException();
+            }
+
+            List<PersonDTO> IPersonServices.FindAll()
+            {
+                throw new NotImplementedException();
+            }
+
+            public PersonDTO Update(PersonDTO person)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

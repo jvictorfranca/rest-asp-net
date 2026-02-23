@@ -1,4 +1,5 @@
-﻿using RestASPNet.Controllers.Model;
+﻿using Mapster;
+using RestASPNet.Controllers.Model;
 using RestASPNet.OldFiles.Repositories;
 using RestASPNet.Repositories;
 using RestASPNet.Repositories.Impl;
@@ -15,28 +16,29 @@ namespace RestASPNet.Services.Impl
             _repository = repository;
         }
 
-        public List<Book> FindAll()
+        public List<BookDTO> FindAll()
         {
        
 
-            return _repository.FindAll();
+            return _repository.FindAll().Adapt<List<BookDTO>>();
         }
 
-        public Book FindById(long id)
+        public BookDTO FindById(long id)
         {
-            var Book = _repository.FindById(id);
+            var book = _repository.FindById(id).Adapt<BookDTO>();
 
-            return Book;
+            return book;
         }
 
-        public Book Create(Book Book)
+        public BookDTO Create(BookDTO book)
         {
-            return _repository.Create(Book);
+            var entityCreate = book.Adapt<Book>();
+            return _repository.Create(entityCreate).Adapt<BookDTO>();
         }
-        public Book Update(Book Book)
+        public BookDTO Update(BookDTO book)
         {
-            
-            return _repository.Update(Book);
+            var entityCreate = book.Adapt<Book>();
+            return _repository.Update(entityCreate).Adapt<BookDTO>();
         }
 
         public void Delete(long id)

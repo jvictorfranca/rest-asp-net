@@ -1,41 +1,46 @@
 ﻿using RestASPNet.Controllers.Model;
+using RestASPNet.Data.Converter.Impl;
 using RestASPNet.Repositories;
 using RestASPNet.Repositories.Impl;
 
+
+// This implementation uses the manual converter, and not the mapster library, as in bookservices for example
 namespace RestASPNet.Services.Impl
 {
     public class PersonServicesImpl : IPersonServices
     {
 
         private readonly IRepository<Person> _repository;
+        private readonly PersonConverter _converter;
 
         public PersonServicesImpl(IRepository<Person> repository)
         {
             _repository = repository;
+            _converter = new PersonConverter();
         }
 
-        public List<Person> FindAll()
+        public List<PersonDTO> FindAll()
         {
        
 
-            return _repository.FindAll();
+            return _converter.ParseList(_repository.FindAll());
         }
 
-        public Person FindById(long id)
+        public PersonDTO FindById(long id)
         {
             var person = _repository.FindById(id);
 
-            return person;
+            return _converter.Parse(person);
         }
 
-        public Person Create(Person person)
-        {
-            return _repository.Create(person);
+        public PersonDTO Create(PersonDTO person)
+        {   var personEntity = _converter.Parse(person);
+            return  _converter.Parse(_repository.Create(personEntity));
         }
-        public Person Update(Person person)
+        public PersonDTO Update(PersonDTO person)
         {
-            
-            return _repository.Update(person);
+            var personEntity = _converter.Parse(person);
+            return _converter.Parse(_repository.Update(personEntity));
         }
 
         public void Delete(long id)
