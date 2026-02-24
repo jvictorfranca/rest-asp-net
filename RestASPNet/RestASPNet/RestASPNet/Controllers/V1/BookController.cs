@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RestASPNet.Controllers.Model;
+using RestASPNet.Data.DTO.V1;
 using RestASPNet.Services;
 
-namespace RestASPNet.Controllers
+namespace RestASPNet.Controllers.V1
 {
     [ApiController]
     [Route("api/[controller]")]

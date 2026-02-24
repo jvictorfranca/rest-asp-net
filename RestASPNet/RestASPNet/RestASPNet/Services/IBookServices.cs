@@ -1,4 +1,4 @@
-﻿using RestASPNet.Controllers.Model;
+﻿using RestASPNet.Data.DTO.V1;
 
 namespace RestASPNet.Services
 {

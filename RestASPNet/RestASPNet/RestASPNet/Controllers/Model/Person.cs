@@ -26,5 +26,8 @@ namespace RestASPNet.Controllers.Model
         [Column("gender", TypeName = "varchar(6)")]
         [MaxLength(6)]
         public string Gender { get; set; }
+
+        //[NotMapped]
+        //public DateTime? Birthday { get; set; }
     }
 }

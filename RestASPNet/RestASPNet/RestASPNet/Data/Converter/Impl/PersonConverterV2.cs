@@ -1,9 +1,10 @@
 ﻿using RestASPNet.Controllers.Model;
 using RestASPNet.Data.Converter.Contract;
+using RestASPNet.Data.DTO.V2;
 
 namespace RestASPNet.Data.Converter.Impl
 {
-    public class PersonConverter : IParser<Person, PersonDTO>, IParser<PersonDTO, Person>
+    public class PersonConverterV2 : IParser<Person, PersonDTO>, IParser<PersonDTO, Person>
     {
         public Person Parse(PersonDTO origin)
         {
@@ -15,6 +16,7 @@ namespace RestASPNet.Data.Converter.Impl
                 LastName = origin.LastName,
                 Adress = origin.Adress,
                 Gender = origin.Gender
+                //BirthDay = origin.BirthDay
             };
         }
 
@@ -33,7 +35,9 @@ namespace RestASPNet.Data.Converter.Impl
                 FirstName = origin.FirstName,
                 LastName = origin.LastName,
                 Adress = origin.Adress,
-                Gender = origin.Gender
+                Gender = origin.Gender,
+                BirthDay = DateTime.Now
+                //BirthDay = origin.BirthDay ?? DateTime.Now,
             };
         }
 

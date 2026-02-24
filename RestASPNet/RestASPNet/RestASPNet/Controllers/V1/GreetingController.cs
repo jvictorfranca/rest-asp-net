@@ -3,7 +3,7 @@ using RestASPNet.Controllers.Model;
 using System.Net.Security;
 using System.Runtime.CompilerServices;
 
-namespace RestASPNet.Controllers
+namespace RestASPNet.Controllers.V1
 {
     [ApiController]
     [Route("[controller]")]

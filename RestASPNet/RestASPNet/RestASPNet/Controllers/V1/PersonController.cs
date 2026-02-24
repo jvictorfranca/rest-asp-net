@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RestASPNet.Controllers.Model;
+using RestASPNet.Data.DTO.V1;
 using RestASPNet.Services;
 
-namespace RestASPNet.Controllers
+namespace RestASPNet.Controllers.V1
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/v1")]
     public class PersonController : ControllerBase
     {
         private readonly IPersonServices _personServices;
@@ -49,6 +49,8 @@ namespace RestASPNet.Controllers
                 _logger.LogError("Failed to create person {firstName}", person.FirstName);
                 return NotFound();
             }
+            Response.Headers.Add("X-API-Deprecated", "true");
+            Response.Headers.Add("X-API-Deprecation-Date", "2026-12-31");
             return Ok(createdPerson);
         }
 

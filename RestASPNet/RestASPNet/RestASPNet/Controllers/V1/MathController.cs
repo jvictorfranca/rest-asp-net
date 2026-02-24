@@ -3,7 +3,7 @@ using RestASPNet.Services;
 using RestASPNet.Utils;
 using System.Runtime.CompilerServices;
 
-namespace RestASPNet.Controllers
+namespace RestASPNet.Controllers.V1
 {
     [ApiController]
     [Route("[controller]")]

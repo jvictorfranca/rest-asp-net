@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Data\Converter\Impl\PersonConverterV1.cs" />
+    <None Include="Data\Converter\Impl\PersonConverterV2.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Evolve" Version="3.2.0" />
     <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.3" />

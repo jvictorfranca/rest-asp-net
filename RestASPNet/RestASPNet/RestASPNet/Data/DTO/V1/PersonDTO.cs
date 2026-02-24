@@ -1,4 +1,4 @@
-﻿namespace RestASPNet.Controllers.Model
+﻿namespace RestASPNet.Data.DTO.V1
 {
     public class PersonDTO
     {

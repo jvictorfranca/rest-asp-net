@@ -1,5 +1,6 @@
 ﻿using RestASPNet.Controllers.Model;
 using RestASPNet.Data.Converter.Impl;
+using RestASPNet.Data.DTO.V1;
 using RestASPNet.Repositories;
 using RestASPNet.Repositories.Impl;
 
@@ -7,16 +8,16 @@ using RestASPNet.Repositories.Impl;
 // This implementation uses the manual converter, and not the mapster library, as in bookservices for example
 namespace RestASPNet.Services.Impl
 {
-    public class PersonServicesImpl : IPersonServices
+    public class PersonServicesImplV1 : IPersonServices
     {
 
         private readonly IRepository<Person> _repository;
-        private readonly PersonConverter _converter;
+        private readonly PersonConverterV1 _converter;
 
-        public PersonServicesImpl(IRepository<Person> repository)
+        public PersonServicesImplV1(IRepository<Person> repository)
         {
             _repository = repository;
-            _converter = new PersonConverter();
+            _converter = new PersonConverterV1();
         }
 
         public List<PersonDTO> FindAll()
