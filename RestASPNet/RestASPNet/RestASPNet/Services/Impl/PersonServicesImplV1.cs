@@ -2,8 +2,6 @@
 using RestASPNet.Data.Converter.Impl;
 using RestASPNet.Data.DTO.V1;
 using RestASPNet.Repositories;
-using RestASPNet.Repositories.Impl;
-
 
 // This implementation uses the manual converter, and not the mapster library, as in bookservices for example
 namespace RestASPNet.Services.Impl
