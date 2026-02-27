@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Net.Cache;
+using System.Text.Json.Serialization;
 
 namespace RestASPNet.Data.DTO.V2
 {
@@ -11,6 +12,7 @@ namespace RestASPNet.Data.DTO.V2
         public string FirstName { get; set; }
 
         [JsonPropertyName("last_name")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string LastName { get; set; }
 
         public string Adress { get; set; }
@@ -19,7 +21,14 @@ namespace RestASPNet.Data.DTO.V2
         public string Gender { get; set; }
 
         [JsonConverter(typeof(Utils.JsonSerializers.DateSerializer))]
+        [JsonIgnore]
         public DateTime? BirthDay { get; set; }
+
+        [JsonIgnore(Condition =JsonIgnoreCondition.WhenWritingDefault)]
+        public int Age { get; set; }
+
+        [JsonIgnore]
+        public bool IsAdult => Age >= 18;
 
     }
 }
