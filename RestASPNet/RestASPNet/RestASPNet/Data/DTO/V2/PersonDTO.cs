@@ -15,6 +15,7 @@ namespace RestASPNet.Data.DTO.V2
 
         public string Adress { get; set; }
 
+        [JsonConverter(typeof(Utils.JsonSerializers.GenderSerializer))]
         public string Gender { get; set; }
 
         [JsonConverter(typeof(Utils.JsonSerializers.DateSerializer))]
