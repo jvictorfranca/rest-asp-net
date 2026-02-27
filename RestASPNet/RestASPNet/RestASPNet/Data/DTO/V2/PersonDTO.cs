@@ -16,6 +16,8 @@ namespace RestASPNet.Data.DTO.V2
         public string Adress { get; set; }
 
         public string Gender { get; set; }
+
+        [JsonConverter(typeof(Utils.JsonSerializers.DateSerializer))]
         public DateTime? BirthDay { get; set; }
 
     }
