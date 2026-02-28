@@ -12,6 +12,9 @@ builder.AddSerilogLogging();
 
 builder.Services.AddControllers().AddContentNegotiation();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddOpenAPIConfig();
+
 
 builder.Services.AddDatabaseConfiguration(builder.Configuration);
 builder.Services.AddEvolveConfiguration(builder.Configuration, builder.Environment);
