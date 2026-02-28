@@ -10,8 +10,8 @@ namespace RestASPNet.Configurations
             {
                 options.RespectBrowserAcceptHeader = true;
                 options.ReturnHttpNotAcceptable = true;
-                options.FormatterMappings.SetMediaTypeMappingForFormat("xml", "application/xml");
                 options.FormatterMappings.SetMediaTypeMappingForFormat("json", "application/json");
+                options.FormatterMappings.SetMediaTypeMappingForFormat("xml", "application/xml");
             })
                 
                 
