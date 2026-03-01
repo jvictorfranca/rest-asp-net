@@ -1,6 +1,6 @@
 @RestASPNet_HostAddress = http://localhost:5205
 
-GET {{RestASPNet_HostAddress}}/weatherforecast/
-Accept: application/json
+GET {{RestASPNet_HostAddress}}/swagger-ui/index.html/
+Accept: text/html
 
 ###

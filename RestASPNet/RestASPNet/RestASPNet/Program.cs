@@ -15,6 +15,7 @@ builder.Services.AddControllers().AddContentNegotiation();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenAPIConfig();
 builder.Services.AddSwaggerConfig();
+builder.Services.AddRouterConfig();
 
 
 builder.Services.AddDatabaseConfiguration(builder.Configuration);
@@ -45,5 +46,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseSwaggerSpecification();
+app.UseScalarConfig();
 
 app.Run();
