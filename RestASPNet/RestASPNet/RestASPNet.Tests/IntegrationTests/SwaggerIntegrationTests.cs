@@ -31,5 +31,21 @@ namespace RestASPNet.Tests.IntegrationTests
             content.Should().NotBeNullOrEmpty();
             content.Should().Contain("/api/person/v1");
         }
+
+        [Fact]
+        public async Task SwaggerUI_ShouldBeAccessible()
+        {
+            // Arrange & Act
+            var response = await _httpClient.GetAsync("/swagger-ui/index.html");
+
+            // Assert
+
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            content.Should().NotBeNullOrEmpty();
+            content.Should().Contain("<div id=\"swagger-ui\">");
+
+        }
+    
     }
 }
