@@ -18,20 +18,27 @@ namespace RestASPNet.Configurations
 
                 try
                 {
-                    using var evolveConnection = new SqlConnection(connectionString);
-                    var evolve = new Evolve(evolveConnection, msg => Log.Information(msg))
-                    {
-                        Locations = new List<string> { "db/migrations", "db/dataset" },
-                        IsEraseDisabled = true,
-                    };
-                    evolve.Migrate();
+                    ExcecuteMigrations(connectionString);
+
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     Log.Error("Database migration failed: {ErrorMessage}", ex.Message);
                     throw;
                 }
             }
-                return services;
+            return services;
+        }
+
+        public static void ExcecuteMigrations(string connectionString)
+        {
+            using var evolveConnection = new SqlConnection(connectionString);
+            var evolve = new Evolve(evolveConnection, msg => Log.Information(msg))
+            {
+                Locations = new List<string> { "db/migrations", "db/dataset" },
+                IsEraseDisabled = true,
+            };
+            evolve.Migrate();
         }
     }
 }

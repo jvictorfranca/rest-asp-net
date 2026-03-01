@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RestASPNet.Tests
+namespace RestASPNet.Tests.UnitTests
 {
     public class PersonConverterTests
     {
