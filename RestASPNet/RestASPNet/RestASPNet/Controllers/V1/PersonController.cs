@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿// using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RestASPNet.Data.DTO.V1;
@@ -24,7 +24,7 @@ namespace RestASPNet.Controllers.V1
         [ProducesResponseType(200, Type= typeof(List<PersonDTO>))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        [EnableCors("LocalPolicy")]
+        // [EnableCors("LocalPolicy")]
         public IActionResult Get()
         {
             _logger.LogInformation("Fetching all people");
