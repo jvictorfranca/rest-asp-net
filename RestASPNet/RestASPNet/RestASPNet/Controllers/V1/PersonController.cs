@@ -21,7 +21,7 @@ namespace RestASPNet.Controllers.V1
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type= typeof(List<PersonDTO>))]
+        [ProducesResponseType(200, Type = typeof(List<PersonDTO>))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         // [EnableCors("LocalPolicy")]
@@ -54,7 +54,7 @@ namespace RestASPNet.Controllers.V1
         [ProducesResponseType(401)]
         // [EnableCors("MultipleOrigin")]
         public IActionResult Post([FromBody] PersonDTO person)
-         {
+        {
             _logger.LogInformation("Creating new person {firstName}", person.FirstName);
             var createdPerson = _personServices.Create(person);
             if (createdPerson == null)
@@ -94,6 +94,21 @@ namespace RestASPNet.Controllers.V1
             _personServices.Delete(id);
             return NoContent();
         }
-        
+
+        [HttpPatch("{id}")]
+        [ProducesResponseType(200, Type = typeof(PersonDTO))]
+        [ProducesResponseType(400)]
+        public IActionResult Disable(long id)
+        {
+            _logger.LogInformation("Disabling person with ID {id}", id);
+            var disabledPerson = _personServices.Disable(id);
+            if (disabledPerson == null)
+            {
+                _logger.LogWarning("Person with ID {id} not found for disable", id);
+                return NotFound();
+            }
+            _logger.LogDebug("Person with ID {id} disabled successfully", id);
+            return Ok(disabledPerson);
+        }
     }
 }

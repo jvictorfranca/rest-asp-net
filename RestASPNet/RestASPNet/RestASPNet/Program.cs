@@ -27,6 +27,7 @@ builder.Services.AddSingleton<MathService>();
 builder.Services.AddScoped<IPersonServices, PersonServicesImplV1>();
 builder.Services.AddScoped<PersonServicesImplV2>();
 
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IBookServices, BookServicesImpl>();
 
 

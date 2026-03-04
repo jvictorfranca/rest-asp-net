@@ -36,6 +36,7 @@ namespace RestASPNet.Data.Converter.Impl
                 LastName = origin.LastName,
                 Adress = origin.Adress,
                 Gender = origin.Gender,
+                Enabled = origin.Enabled,
                 //BirthDay = origin.BirthDay ?? DateTime.Now,
             };
         }

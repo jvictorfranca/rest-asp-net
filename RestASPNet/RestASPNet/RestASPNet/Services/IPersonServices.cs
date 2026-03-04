@@ -9,5 +9,7 @@ namespace RestASPNet.Services
         List<PersonDTO> FindAll();
         PersonDTO Update(PersonDTO person);
         void Delete(long id);
+
+        PersonDTO Disable(long id);
     }
 }

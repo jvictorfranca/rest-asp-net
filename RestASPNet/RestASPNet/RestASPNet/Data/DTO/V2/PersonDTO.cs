@@ -30,5 +30,7 @@ namespace RestASPNet.Data.DTO.V2
         [JsonIgnore]
         public bool IsAdult => Age >= 18;
 
+        public bool Enabled { get; set; }
+
     }
 }

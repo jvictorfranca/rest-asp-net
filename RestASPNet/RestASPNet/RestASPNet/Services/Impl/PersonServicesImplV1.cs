@@ -1,4 +1,5 @@
-﻿using RestASPNet.Controllers.Model;
+﻿using Mapster;
+using RestASPNet.Controllers.Model;
 using RestASPNet.Data.Converter.Impl;
 using RestASPNet.Data.DTO.V1;
 using RestASPNet.Repositories;
@@ -9,10 +10,10 @@ namespace RestASPNet.Services.Impl
     public class PersonServicesImplV1 : IPersonServices
     {
 
-        private readonly IRepository<Person> _repository;
+        private readonly IPersonRepository _repository;
         private readonly PersonConverterV1 _converter;
 
-        public PersonServicesImplV1(IRepository<Person> repository)
+        public PersonServicesImplV1(IPersonRepository repository)
         {
             _repository = repository;
             _converter = new PersonConverterV1();
@@ -45,6 +46,12 @@ namespace RestASPNet.Services.Impl
         public void Delete(long id)
         {
             _repository.Delete(id);
+        }
+
+        public PersonDTO Disable(long id)
+        {
+           var entity = _repository.Disable(id);
+            return entity?.Adapt<PersonDTO>();
         }
 
 
