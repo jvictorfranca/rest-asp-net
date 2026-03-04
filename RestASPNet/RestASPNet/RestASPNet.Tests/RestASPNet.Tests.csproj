@@ -37,5 +37,9 @@
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
+	
+  <ItemGroup>
+    <Folder Include="IntegrationTests\Person\XML\" />
+  </ItemGroup>
 
 </Project>
