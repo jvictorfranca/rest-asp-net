@@ -16,7 +16,7 @@ namespace RestASPNet.Tests.IntegrationTests.Tools
             Container = new MsSqlBuilder()
                 .WithPassword("YourStrong!Passw0rd")
                 .Build();
-            Container.StartAsync().GetAwaiter().GetResult();
+            //Container.StartAsync().GetAwaiter().GetResult();
         }
 
 
