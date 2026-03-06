@@ -117,4 +117,22 @@ public class PersonControlerJsonIntegrationTests : IClassFixture<SQLServerFixtur
         // Assert
         response.EnsureSuccessStatusCode();
     }
+
+    [Fact(DisplayName = "05 - Find all person should word ")]
+    [TestPriority(6)]
+    public async Task FindAllPePersons_ShouldSuccess()
+    {
+        // Act
+        var response = await _httpClient.GetAsync("/api/person/v1");
+        // Assert
+        response.EnsureSuccessStatusCode();
+
+        var list = await response.Content.ReadFromJsonAsync<List<PersonDTO>>();
+        list.Should().NotBeNull();
+
+        var first = list[0];
+
+        first.FirstName.Should().Be("JSON_Updated");
+        first.Gender.Should().Be("Male");
+    }
 }
