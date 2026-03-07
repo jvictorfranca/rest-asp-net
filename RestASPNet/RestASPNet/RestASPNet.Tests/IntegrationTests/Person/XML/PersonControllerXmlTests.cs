@@ -49,11 +49,11 @@ public class PersonControlerXmlIntegrationTests : IClassFixture<SQLServerFixture
         };
 
         // Act
-        var response = await _httpClient.PostAsJsonAsync("/api/person/v1", request);
+        var response = await _httpClient.PostAsync("/api/person/v1", XmlHelper.SerializeToXml(request));
         // Assert
         response.EnsureSuccessStatusCode();
 
-        var createdPerson = await response.Content.ReadFromJsonAsync<PersonDTO>();
+        var createdPerson = await XmlHelper.DeserializeFromXmlAsync<PersonDTO>(response);
         createdPerson.Should().BeEquivalentTo(request, options => options.Excluding(x => x.Id));
 
         _person = createdPerson;
@@ -76,11 +76,11 @@ public class PersonControlerXmlIntegrationTests : IClassFixture<SQLServerFixture
         };
 
         // Act
-        var response = await _httpClient.PutAsJsonAsync("/api/person/v1", request);
+        var response = await _httpClient.PutAsync("/api/person/v1", XmlHelper.SerializeToXml(request));
         // Assert
         response.EnsureSuccessStatusCode();
 
-        var updatedPerson = await response.Content.ReadFromJsonAsync<PersonDTO>();
+        var updatedPerson = await XmlHelper.DeserializeFromXmlAsync<PersonDTO>(response); ;
         updatedPerson.LastName.Should().Be(request.LastName);
     }
 
@@ -92,7 +92,7 @@ public class PersonControlerXmlIntegrationTests : IClassFixture<SQLServerFixture
         var response = await _httpClient.PatchAsync($"/api/person/v1/{_person.Id}", null);
         // Assert
         response.EnsureSuccessStatusCode();
-        var disabledPerson = await response.Content.ReadFromJsonAsync<PersonDTO>();
+        var disabledPerson = await XmlHelper.DeserializeFromXmlAsync<PersonDTO>(response);
         disabledPerson.Enabled.Should().BeFalse();
     }
 
@@ -104,7 +104,7 @@ public class PersonControlerXmlIntegrationTests : IClassFixture<SQLServerFixture
         var response = await _httpClient.GetAsync($"/api/person/v1/{_person.Id}");
         // Assert
         response.EnsureSuccessStatusCode();
-        var person = await response.Content.ReadFromJsonAsync<PersonDTO>();
+        var person = await XmlHelper.DeserializeFromXmlAsync<PersonDTO>(response);
         person.Should().NotBeNull();
         person.Id.Should().Be(_person.Id);
         person.FirstName.Should().Be(_person.FirstName);
@@ -130,7 +130,7 @@ public class PersonControlerXmlIntegrationTests : IClassFixture<SQLServerFixture
         // Assert
         response.EnsureSuccessStatusCode();
 
-        var list = await response.Content.ReadFromJsonAsync<List<PersonDTO>>();
+        var list = await XmlHelper.DeserializeFromXmlAsync<List<PersonDTO>>(response);
         list.Should().NotBeNull();
 
         var first = list[0];
