@@ -3,6 +3,7 @@ using RestASPNet.Services;
 using RestASPNet.Repositories;
 using RestASPNet.Services.Impl;
 using RestASPNet.Repositories.Impl;
+using RestASPNet.Hypermedia.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddSerilogLogging(); 
 
-builder.Services.AddControllers().AddContentNegotiation();
+builder.Services.AddControllers(
+        options => {
+            options.Filters.Add<HypermediaFilter>();
+            }
+    ).
+    AddContentNegotiation();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenAPIConfig();
@@ -18,6 +24,7 @@ builder.Services.AddSwaggerConfig();
 builder.Services.AddRouterConfig();
 
 builder.Services.AddCorsConfiguration(builder.Configuration);
+builder.Services.AddHATEOASConfiguration();
 
 builder.Services.AddDatabaseConfiguration(builder.Configuration);
 builder.Services.AddEvolveConfiguration(builder.Configuration, builder.Environment);
@@ -49,6 +56,7 @@ app.UseRouting();
 app.UseCorsConfiguration( builder.Configuration);
 
 app.MapControllers();
+app.UseHATEOASRoutes();
 
 app.UseSwaggerSpecification();
 app.UseScalarConfig();
