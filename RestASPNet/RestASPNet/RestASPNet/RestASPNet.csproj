@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Hypermedia\Enricher\" />
     <Folder Include="OldFiles\Services\Impl\" />
   </ItemGroup>
 
