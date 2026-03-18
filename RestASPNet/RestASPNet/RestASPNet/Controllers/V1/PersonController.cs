@@ -20,7 +20,7 @@ namespace RestASPNet.Controllers.V1
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet(Name ="GetAllPersons")]
         [ProducesResponseType(200, Type = typeof(List<PersonDTO>))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -31,7 +31,7 @@ namespace RestASPNet.Controllers.V1
             return Ok(_personServices.FindAll());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name ="GetPersonById")]
         [ProducesResponseType(200, Type = typeof(PersonDTO))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -48,7 +48,7 @@ namespace RestASPNet.Controllers.V1
 
         }
 
-        [HttpPost]
+        [HttpPost(Name = "CreatePerson")]
         [ProducesResponseType(200, Type = typeof(PersonDTO))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -67,7 +67,7 @@ namespace RestASPNet.Controllers.V1
             return Ok(createdPerson);
         }
 
-        [HttpPut]
+        [HttpPut(Name ="UpdatePerson")]
         [ProducesResponseType(200, Type = typeof(PersonDTO))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -84,7 +84,7 @@ namespace RestASPNet.Controllers.V1
             return Ok(createdPerson);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name ="DeletePerson")]
         [ProducesResponseType(204, Type = typeof(PersonDTO))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -95,7 +95,7 @@ namespace RestASPNet.Controllers.V1
             return NoContent();
         }
 
-        [HttpPatch("{id}")]
+        [HttpPatch("{id}", Name ="DisablePerson")]
         [ProducesResponseType(200, Type = typeof(PersonDTO))]
         [ProducesResponseType(400)]
         public IActionResult Disable(long id)

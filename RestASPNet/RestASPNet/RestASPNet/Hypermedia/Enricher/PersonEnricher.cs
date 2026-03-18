@@ -10,53 +10,53 @@ namespace RestASPNet.Hypermedia.Enricher
         {
             var request = urlHelper.ActionContext.HttpContext.Request;
             var baseUrl = $"{request.Scheme}://{request.Host.ToUriComponent()}{request.PathBase.ToUriComponent()}";
-            content.Links.AddRange(GenerateLinks(content.Id, baseUrl));
+            content.Links.AddRange(GenerateLinks(content.Id, urlHelper));
             return Task.CompletedTask;
         }
 
-        private IEnumerable<HypermediaLink> GenerateLinks(long id, string baseUrl)
+        private IEnumerable<HypermediaLink> GenerateLinks(long id,IUrlHelper urlHelper)
         {
             return new List<HypermediaLink>
             {
                 new HypermediaLink
                 {
                     Rel = RelationType.COLLECTION,
-                    Href = $"{baseUrl}/{id}",
+                    Href = urlHelper.Link("GetAllPersons", null),
                     Type = ResponseTypeFormat.defaultGet,
                     Action = HttpActionVerb.GET,
                 },
                 new HypermediaLink
                 {
                     Rel = RelationType.SELF,
-                    Href = $"{baseUrl}/{id}",
+                    Href = urlHelper.Link("GetPersonById", new { id }),
                     Type = ResponseTypeFormat.defaultGet,
                     Action = HttpActionVerb.GET,
                 },
                 new HypermediaLink
                 {
                     Rel = RelationType.CREATE,
-                    Href = $"{baseUrl}/{id}",
+                    Href = urlHelper.Link("CreatePerson", null),
                     Type = ResponseTypeFormat.defaultPost,
                     Action = HttpActionVerb.PUT,
                 },
                 new HypermediaLink
                 {
                     Rel = RelationType.UPDATE,
-                    Href = $"{baseUrl}/{id}",
+                    Href = urlHelper.Link("UpdatePerson", null),
                     Type = ResponseTypeFormat.defaultPut,
                     Action = HttpActionVerb.PUT,
                 },
                 new HypermediaLink
                 {
                     Rel = RelationType.PATCH,
-                    Href = $"{baseUrl}/{id}",
+                    Href = urlHelper.Link("DisablePerson", new { id }),
                     Type = ResponseTypeFormat.defaultPatch,
                     Action = HttpActionVerb.PATCH,
                 },
                 new HypermediaLink
                 {
                     Rel = RelationType.DELETE,
-                    Href = $"{baseUrl}/{id}",
+                    Href = urlHelper.Link("DeletePerson", new { id }),
                     Type = ResponseTypeFormat.defaultDelete,
                     Action = HttpActionVerb.DELETE,
                 },
