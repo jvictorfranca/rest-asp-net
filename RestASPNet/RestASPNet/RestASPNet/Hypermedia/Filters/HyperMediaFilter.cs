@@ -5,7 +5,7 @@ namespace RestASPNet.Hypermedia.Filters
 {
     public class HypermediaFilter(HypermediaFilterOptions hypermediaFilterOptions) : ResultFilterAttribute
     {
-        private readonly HypermediaFilterOptions _hypermediaFilterOptions;
+        private readonly HypermediaFilterOptions _hypermediaFilterOptions = hypermediaFilterOptions;
 
         public override void OnResultExecuting(ResultExecutingContext context)
         {

@@ -13,6 +13,8 @@ namespace RestASPNet.Configurations
             services.AddSingleton(filterOptions);
 
             services.AddScoped<HypermediaFilter>();
+
+            return services;
         }
 
         public static void UseHATEOASRoutes(this IEndpointRouteBuilder app)

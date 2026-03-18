@@ -11,6 +11,7 @@ namespace RestASPNet.Hypermedia.Enricher
             var request = urlHelper.ActionContext.HttpContext.Request;
             var baseUrl = $"{request.Scheme}://{request.Host.ToUriComponent()}{request.PathBase.ToUriComponent()}";
             content.Links.AddRange(GenerateLinks(content.Id, baseUrl));
+            return Task.CompletedTask;
         }
 
         private IEnumerable<HypermediaLink> GenerateLinks(long id, string baseUrl)
