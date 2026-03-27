@@ -18,7 +18,7 @@ namespace RestASPNet.Controllers.V1
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetAllBooks")]
         [ProducesResponseType(200, Type = typeof(List<BookDTO>))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -28,7 +28,7 @@ namespace RestASPNet.Controllers.V1
             return Ok(_BookServices.FindAll());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetBookById")]
         [ProducesResponseType(200, Type = typeof(BookDTO))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -45,7 +45,7 @@ namespace RestASPNet.Controllers.V1
 
         }
 
-        [HttpPost]
+        [HttpPost(Name = "CreateBook")]
         [ProducesResponseType(200, Type = typeof(BookDTO))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -61,7 +61,7 @@ namespace RestASPNet.Controllers.V1
             return Ok(createdBook);
         }
 
-        [HttpPut]
+        [HttpPut(Name = "UpdateBook")]
         [ProducesResponseType(200, Type = typeof(BookDTO))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -78,7 +78,7 @@ namespace RestASPNet.Controllers.V1
             return Ok(createdBook);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = "DeleteBook")]
         [ProducesResponseType(204, Type = typeof(BookDTO))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]

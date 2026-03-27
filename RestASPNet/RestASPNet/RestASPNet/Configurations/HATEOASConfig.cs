@@ -9,7 +9,10 @@ namespace RestASPNet.Configurations
         public static IServiceCollection AddHATEOASConfiguration(this IServiceCollection services)
         {
             var filterOptions = new HypermediaFilterOptions();
+
             filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
+            filterOptions.ContentResponseEnricherList.Add(new BookEnricher());
+
             services.AddSingleton(filterOptions);
 
             services.AddScoped<HypermediaFilter>();
