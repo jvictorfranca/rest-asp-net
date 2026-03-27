@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+using RestASPNet.Controllers.Model.Context;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace RestASPNet.Tests.IntegrationTests.Tools
 {
@@ -17,12 +21,23 @@ namespace RestASPNet.Tests.IntegrationTests.Tools
             {
                 builder.ConfigureAppConfiguration((context, config) =>
                 {
-                    var inMemorySettings = new Dictionary<string, string>
-                    {
-                        ["MSSQLServerSqlConnection:ConnectionString"] = _connectionString
-                    };
-                    config.AddInMemoryCollection(inMemorySettings!);
+                 var testConfigPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "appsettings.Test.json");
+                    config.Sources.Clear();
+                    config.AddJsonFile(testConfigPath, optional: false, reloadOnChange: true);
                 });
+
+            builder.ConfigureServices(services => 
+            {
+                var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<MSSQLContext>));
+                if(descriptor != null)
+                {
+                    services.Remove(descriptor);
+                }
+                services.AddDbContext<MSSQLContext>(options =>
+                {
+                    options.UseSqlServer(_connectionString);
+                });
+            }); 
         }
     }
 }
