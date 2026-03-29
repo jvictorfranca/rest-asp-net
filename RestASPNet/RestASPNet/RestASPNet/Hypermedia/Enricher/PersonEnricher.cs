@@ -27,6 +27,13 @@ namespace RestASPNet.Hypermedia.Enricher
                 },
                 new HypermediaLink
                 {
+                    Rel = RelationType.COLLECTION,
+                    Href = urlHelper.Link("GetAllPersonsByName", null),
+                    Type = ResponseTypeFormat.defaultGet,
+                    Action = HttpActionVerb.GET,
+                },
+                new HypermediaLink
+                {
                     Rel = RelationType.SELF,
                     Href = urlHelper.Link("GetPersonById", new { id }),
                     Type = ResponseTypeFormat.defaultGet,

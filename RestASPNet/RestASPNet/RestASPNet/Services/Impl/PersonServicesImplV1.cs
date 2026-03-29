@@ -54,6 +54,9 @@ namespace RestASPNet.Services.Impl
             return entity?.Adapt<PersonDTO>();
         }
 
-
+        public List<PersonDTO> FindByName(string firstName, string lastName)
+        {
+            return _converter.ParseList(_repository.FindByName(firstName, lastName));
+        }
     }
 }

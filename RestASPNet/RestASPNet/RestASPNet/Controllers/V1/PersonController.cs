@@ -31,6 +31,20 @@ namespace RestASPNet.Controllers.V1
             return Ok(_personServices.FindAll());
         }
 
+        [HttpGet("find-by-name", Name = "GetAllPersonsByName")]
+        [ProducesResponseType(200, Type = typeof(List<PersonDTO>))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        // [EnableCors("LocalPolicy")]
+        public IActionResult GetByName(
+            [FromQuery] string? firstName,
+            [FromQuery] string? lastName
+            )
+        {
+            _logger.LogInformation("Fetching all people by name");
+            return Ok(_personServices.FindByName(firstName, lastName));
+        }
+
         [HttpGet("{id}", Name ="GetPersonById")]
         [ProducesResponseType(200, Type = typeof(PersonDTO))]
         [ProducesResponseType(400)]

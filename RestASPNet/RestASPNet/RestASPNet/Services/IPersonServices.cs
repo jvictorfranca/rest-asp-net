@@ -11,5 +11,7 @@ namespace RestASPNet.Services
         void Delete(long id);
 
         PersonDTO Disable(long id);
+
+        List<PersonDTO> FindByName(string firstName, string lastName);
     }
 }
