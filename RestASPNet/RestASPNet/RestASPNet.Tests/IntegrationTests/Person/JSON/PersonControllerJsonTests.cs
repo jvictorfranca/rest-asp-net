@@ -12,7 +12,7 @@ using System.Text;
 namespace RestASPNet.Tests.IntegrationTests.Person;
 
 [TestCaseOrderer("RestASPNet.Tests.IntegrationTests.Tools.PriorityOrder", "RestASPNet.Tests")]
-public class PersonControlerJsonIntegrationTests : IClassFixture<SQLServerFixture>
+public class PersonControlerJsonIntegrationTests: IClassFixture<SQLServerFixture>
 {
 
     private readonly HttpClient _httpClient;
