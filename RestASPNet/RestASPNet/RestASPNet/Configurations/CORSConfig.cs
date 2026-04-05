@@ -41,8 +41,13 @@
             var origins = GetAllowedOrigins(configuration);
             app.Use(async (context, next) =>
             {
-            var origin = context.Request.Headers["Origin"].ToString();
-                if (!string.IsNullOrEmpty(origin) && !origins.Contains(origin, StringComparer.OrdinalIgnoreCase))
+                var selfOrigin = $"{context.Request.Scheme}://{context.Request.Host}";
+                var origin = context.Request.Headers["Origin"].ToString();
+                if (
+                !string.IsNullOrEmpty(origin) 
+                && !origins.Contains(origin, StringComparer.OrdinalIgnoreCase) 
+                && !origin.Equals(selfOrigin, StringComparison.OrdinalIgnoreCase)
+                )
                 {
                     context.Response.StatusCode = StatusCodes.Status403Forbidden;
                 await context.Response.WriteAsync("CORS policy does not allow this origin.");
