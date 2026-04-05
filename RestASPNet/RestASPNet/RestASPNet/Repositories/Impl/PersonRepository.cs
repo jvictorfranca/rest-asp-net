@@ -1,5 +1,6 @@
 ﻿using RestASPNet.Controllers.Model;
 using RestASPNet.Controllers.Model.Context;
+using RestASPNet.Hypermedia.Utils;
 
 namespace RestASPNet.Repositories.Impl
 {
@@ -26,6 +27,25 @@ namespace RestASPNet.Repositories.Impl
                 query = query.Where(p => p.LastName.Contains(lastName));
             }
             return query.ToList();
+        }
+
+        public PagedSearch<Person> FindWithPagedSearch(string name, string sortDirection, int pageSize, int page)
+        {
+            var queryBuilder = new QueryBuilders.PersonQueryBuilder();
+            var (query, countQuery, sort, size, offset) = queryBuilder.BuildQueries(name, sortDirection, pageSize, page);
+            var persons = base.FindWithPagedSearch(query);
+            var totalResults = base.GetCount(countQuery);
+
+            return new PagedSearch<Person>()
+            {
+                CurrentPage = page,
+                PageSize = size,
+                Filters = [],
+                sortDirection = sort,
+                sortFields = null,
+                TotalResults = totalResults,
+                List = persons
+            };
         }
     };
 }

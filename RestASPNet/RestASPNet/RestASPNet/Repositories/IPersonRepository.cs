@@ -7,5 +7,7 @@ namespace RestASPNet.Repositories
     {
         Person Disable(long id);
         List<Person>FindByName(string firstName, string lastName);
+
+        PagedSearch<Person> FindWithPagedSearch(string name, string sortDirection, int pageSize, int page);
     }
 }
