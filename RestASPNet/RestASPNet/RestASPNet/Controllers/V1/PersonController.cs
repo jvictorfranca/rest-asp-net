@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RestASPNet.Data.DTO.V1;
+using RestASPNet.Hypermedia.Utils;
 using RestASPNet.Services;
 
 namespace RestASPNet.Controllers.V1
@@ -20,15 +21,20 @@ namespace RestASPNet.Controllers.V1
             _logger = logger;
         }
 
-        [HttpGet(Name ="GetAllPersons")]
-        [ProducesResponseType(200, Type = typeof(List<PersonDTO>))]
+        //{baseUrl/api/person/v1/{sortDirection}/{pageSize}/{page}?name=Leo
+        [HttpGet("{sortDirection}/{pageSize}/{page}", Name ="GetAllPersons")]
+        [ProducesResponseType(200, Type = typeof(PagedSearchDTO<PersonDTO>))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         // [EnableCors("LocalPolicy")]
-        public IActionResult Get()
+        public IActionResult Get(
+            [FromQuery] string? name,
+            string sortDirection,
+            int pageSize,
+            int page)
         {
-            _logger.LogInformation("Fetching all people");
-            return Ok(_personServices.FindAll());
+            _logger.LogInformation("Fetching all people with paged search: {name}, {sortDirection}, {pageSize}, {page}");
+            return Ok(_personServices.FindWithPagedSearch(name, sortDirection, pageSize, page));
         }
 
         [HttpGet("find-by-name", Name = "GetAllPersonsByName")]

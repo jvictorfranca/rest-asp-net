@@ -1,7 +1,13 @@
 ﻿using RestASPNet.Hypermedia.Abstract;
+using System.Xml.Serialization;
 
 namespace RestASPNet.Hypermedia.Utils
 {
+    public class FilterItem
+    {
+        public string Key { get; set; }
+        public string Value { get; set; }
+    }
     public class PagedSearchDTO<T> where T : ISupportsHypermedia
     {
         public int CurrentPage { get; set; }
@@ -10,20 +16,12 @@ namespace RestASPNet.Hypermedia.Utils
 
         public string sortFields { get; set; }
         public string sortDirection { get; set; } = "asc";
-        public Dictionary<string, object> Filters { get; set; } = [];
+        [XmlIgnore]
+        public List<FilterItem> Filters { get; set; } = [];
         public List<T> List { get; set; } = [];
     
-        public PagedSearchDTO(int currentPage, int pageSize, string sortFields, string sortDirection, Dictionary<string, object> filters)
-        {
-            CurrentPage = currentPage;
-            PageSize = pageSize;
-            this.sortFields = sortFields;
-            this.sortDirection = sortDirection;
-            Filters = filters ?? [];
-        }
-        public PagedSearchDTO(int currentPage, string sortFields, string sortDirection)
-            : this(currentPage, 10, sortFields, sortDirection, null) { }
-
+        public PagedSearchDTO()
+        {}
         public int GetCurrentPage()
         {
             return CurrentPage == 0 ? 1 : CurrentPage;

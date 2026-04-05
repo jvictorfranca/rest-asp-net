@@ -66,8 +66,13 @@ namespace RestASPNet.Services.Impl
             var persons = _repository.FindWithPagedSearch(query);
             var totalResults = _repository.GetCount(countQuery);
 
-            return new PagedSearchDTO<PersonDTO>(page, size, null, sort, null)
+            return new PagedSearchDTO<PersonDTO>()
             {
+                CurrentPage = page,
+                PageSize = size,
+                Filters = [],
+                sortDirection = sort,
+                sortFields = null,
                 TotalResults = totalResults,
                 List = _converter.ParseList(persons)
             };
