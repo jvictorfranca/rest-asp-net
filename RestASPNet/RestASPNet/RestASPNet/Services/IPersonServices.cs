@@ -1,4 +1,5 @@
 ﻿using RestASPNet.Data.DTO.V1;
+using RestASPNet.Hypermedia.Utils;
 
 namespace RestASPNet.Services
 {
@@ -13,5 +14,7 @@ namespace RestASPNet.Services
         PersonDTO Disable(long id);
 
         List<PersonDTO> FindByName(string firstName, string lastName);
+
+        PagedSearchDTO<PersonDTO> FindWithPagedSearch(string name, string sortDirection, int pageSize, int page);
     }
 }
