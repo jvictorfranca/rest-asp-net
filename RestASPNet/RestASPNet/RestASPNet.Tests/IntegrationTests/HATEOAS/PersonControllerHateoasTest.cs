@@ -87,6 +87,7 @@ namespace RestASPNet.Tests.IntegrationTests.HATEOAS
             personResponse.EnsureSuccessStatusCode();
             PersonDTO? person = await personResponse.Content.ReadFromJsonAsync<PersonDTO>();
             person.Enabled = true;
+            person.Links = null;
             var responsePut = await _httpClient.PutAsJsonAsync("/api/person/v1", person);
             responsePut.EnsureSuccessStatusCode();
 
