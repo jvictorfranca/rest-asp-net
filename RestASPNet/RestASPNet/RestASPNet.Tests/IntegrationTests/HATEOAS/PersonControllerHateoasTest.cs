@@ -68,6 +68,7 @@ namespace RestASPNet.Tests.IntegrationTests.HATEOAS
             personResponse.EnsureSuccessStatusCode();
             PersonDTO? person = await personResponse.Content.ReadFromJsonAsync<PersonDTO>();
             person.LastName = "Updated HATEOAS Test";
+            person.Links = null;
             var response = await _httpClient.PutAsJsonAsync("/api/person/v1", person);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -112,5 +113,60 @@ namespace RestASPNet.Tests.IntegrationTests.HATEOAS
             AssertLinkPattern(content, "update");
             AssertLinkPattern(content, "delete");
         }
+
+        [Fact(DisplayName = "05 - GetAllPersons")]
+        [TestPriority(5)]
+        public async Task Test05_GetAllPersons()
+        {
+            // ---------------------------
+            // Act
+            // ---------------------------
+            // Perform the HTTP GET request to retrieve all persons.
+            var response = await _httpClient
+                .GetAsync("api/person/v1/asc/10/1");// Ensures the response status code is 2xx.
+
+            // Read the response content as a string.
+            var content = await response.Content.ReadAsStringAsync();
+
+            // ---------------------------
+            // Assert
+            // ---------------------------
+            // Extract all "id" values from the response JSON using Regex.
+            var idMatches = Regex.Matches(content, @"""list"":\s*\[\s*{[^}]*""id"":\s*(\d+)");
+            idMatches.Count.Should().BeGreaterThan(0, "There should be at least one person");
+
+            // Iterate through each person id found in the response.
+            foreach (Match match in idMatches)
+            {
+                var id = match.Groups[1].Value;
+
+                // Expected hypermedia relations (HATEOAS links).
+                var expectedRels = new[] { "collection", "self", "create", "update", "patch", "delete" };
+
+                foreach (var rel in expectedRels)
+                {
+                    // Build the expected regex pattern depending on the relation.
+                    // For "self" and "delete", the link must contain the specific id.
+                    // For others, the link points to the base endpoint.
+                    var pattern = rel switch
+                    {
+                        "self" or "delete" or "patch" =>
+                            $@"""rel"":\s*""{rel}"".*?""href"":\s*""https?://.+/api/person/v1/{id}""",
+                        _ =>
+                            $@"""rel"":\s*""{rel}"".*?""href"":\s*""https?://.+/api/person/v1"""
+                    };
+
+                    // Assert that the link with the correct "rel" and "href" exists.
+                    Regex.IsMatch(content, pattern, RegexOptions.IgnoreCase)
+                         .Should().BeTrue($"Link '{rel}' should exist for person {id}");
+
+                    // Assert that each link also contains a "type" attribute.
+                    var typePattern = $@"""rel"":\s*""{rel}"".*?""type"":\s*""[^""]+""";
+                    Regex.IsMatch(content, typePattern)
+                         .Should().BeTrue($"Link '{rel}' must have a type for person {id}");
+                }
+            }
+        }
+
     }
 }

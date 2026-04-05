@@ -15,6 +15,6 @@ namespace RestASPNet.Data.DTO.V1
         public string Gender { get; set; }
 
         public bool Enabled { get; set; }
-        public List<HypermediaLink> Links { get; set; } = [];
+        public List<HypermediaLink>? Links { get; set; } = [];
     }
 }

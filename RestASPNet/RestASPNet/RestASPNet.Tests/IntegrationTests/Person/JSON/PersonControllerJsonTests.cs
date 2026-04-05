@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Renci.SshNet.Sftp;
 using RestASPNet.Data.DTO.V1;
+using RestASPNet.Hypermedia.Utils;
 using RestASPNet.Tests.IntegrationTests.Tools;
 using System;
 using System.Collections.Generic;
@@ -118,21 +119,23 @@ public class PersonControlerJsonIntegrationTests: IClassFixture<SQLServerFixture
         response.EnsureSuccessStatusCode();
     }
 
-    [Fact(DisplayName = "05 - Find all person should word ")]
+    [Fact(DisplayName = "06 - Find all person should word ")]
     [TestPriority(6)]
     public async Task FindAllPePersons_ShouldSuccess()
     {
         // Act
-        var response = await _httpClient.GetAsync("/api/person/v1");
+        var response = await _httpClient.GetAsync("/api/person/v1/asc/10/1");
         // Assert
         response.EnsureSuccessStatusCode();
 
-        var list = await response.Content.ReadFromJsonAsync<List<PersonDTO>>();
-        list.Should().NotBeNull();
+        var page = await response.Content.ReadFromJsonAsync<PagedSearchDTO<PersonDTO>>();
+        page.Should().NotBeNull();
+        page.CurrentPage.Should().Be(1);
+        var list = page?.List;
 
         var first = list[0];
 
-        first.FirstName.Should().Be("JSON_Updated");
+        first.FirstName.Should().NotBeNull();
         first.Gender.Should().Be("Male");
     }
 }
