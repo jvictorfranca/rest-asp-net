@@ -10,8 +10,8 @@
     ) BuildQueries(string name, string sortDirection, int pageSize, int page)
         {
             page = Math.Max(page, 1);
-            var offset = (page - 1) * pageSize;
             var size = pageSize < 1 ? 1 : pageSize;
+            var offset = (page - 1) * size;
 
             var sort = !string.IsNullOrEmpty(sortDirection) && !sortDirection.ToLower().Equals("desc") ? "asc" : "desc";
 
