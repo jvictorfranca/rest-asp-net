@@ -38,5 +38,29 @@ namespace RestASPNet.Controllers.V1
                 return BadRequest(ex.Message);
             }
         }
-     }
+
+        [HttpPost("uploadMultipleFiles", Name = "UploadMultipleFiles")]
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(200, Type = typeof(List<FileDetailDTO>))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Produces("application/json", "application/xml")]
+
+        public async Task<IActionResult> UploadMultipleFiles([FromForm] MultipleFilesUploadDTO input)
+        {
+            var files = input.Files;
+            _logger.LogInformation("Uploading multiple files {number}", files.Count);
+            try
+            {
+                var filesDetail = await _fileServices.SaveFilesToDisk(files);
+                _logger.LogInformation("Files uploaded successfully");
+                return Ok(filesDetail);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error uploading multiple files");
+                return BadRequest(ex.Message);
+            }
+        }
+    }
 }

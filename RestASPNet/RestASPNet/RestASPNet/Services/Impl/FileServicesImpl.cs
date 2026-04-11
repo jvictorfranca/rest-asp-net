@@ -55,9 +55,15 @@ namespace RestASPNet.Services.Impl
         }
 
 
-        public Task<List<FileDetailDTO>> SaveFilesToDisk(List<IFormFile> files)
+        public async Task<List<FileDetailDTO>> SaveFilesToDisk(List<IFormFile> files)
         {
-            throw new NotImplementedException();
+            var results = new List<FileDetailDTO>();
+            foreach (var file in files) { 
+                var detail = await SaveToDisk(file);
+                if (!string.IsNullOrEmpty(detail.DocumentName))
+                    results.Add(detail);
+            }
+             return results;
         }
     }
 }
