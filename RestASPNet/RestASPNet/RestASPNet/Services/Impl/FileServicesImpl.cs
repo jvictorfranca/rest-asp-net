@@ -49,10 +49,6 @@ namespace RestASPNet.Services.Impl
 
         }
 
-        public byte[] GetFile(string fileName)
-        {
-            throw new NotImplementedException();
-        }
 
 
         public async Task<List<FileDetailDTO>> SaveFilesToDisk(List<IFormFile> files)
@@ -64,6 +60,15 @@ namespace RestASPNet.Services.Impl
                     results.Add(detail);
             }
              return results;
+        }
+        public byte[] GetFile(string fileName)
+        {
+            var filePath = Path.Combine(_basePath, fileName);
+
+            if (!File.Exists(filePath))
+                return null;
+
+            return File.ReadAllBytes(filePath);
         }
     }
 }

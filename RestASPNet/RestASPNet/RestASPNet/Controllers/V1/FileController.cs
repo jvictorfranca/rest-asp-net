@@ -16,6 +16,31 @@ namespace RestASPNet.Controllers.V1
             _logger = logger;
         }
 
+        [HttpGet("downloadFile/{fileName}", Name = "DownloadFile")]
+        [ProducesResponseType(200, Type = typeof(byte[]))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Produces("application/octet-stream")]
+
+        public async Task<IActionResult> DownloadFile(string fileName)
+        {
+            _logger.LogInformation("Downloading file {fileName}", fileName);
+            try
+            {
+            var buffer = _fileServices.GetFile(fileName);
+            if (buffer == null)
+                    return NotFound();
+                _logger.LogInformation("File {fileName} downloaded successfully", fileName);
+                var contentType = $"application/{Path.GetExtension(fileName).TrimStart(".")}";
+                return File(buffer, contentType, fileName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error uploading file {fileName}", fileName);
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("uploadFile", Name = "UploadFile")]
         [ProducesResponseType(200, Type = typeof(FileDetailDTO))]
         [ProducesResponseType(400)]
