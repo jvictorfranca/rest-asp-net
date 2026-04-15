@@ -1,5 +1,5 @@
-﻿using RestASPNet.Controllers.Model;
-using RestASPNet.Controllers.Model.Context;
+﻿using RestASPNet.Model;
+using RestASPNet.Model.Context;
 
 namespace RestASPNet.OldFiles.Repositories.Impl
 {

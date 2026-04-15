@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RestASPNet.Controllers.Model.Base;
-using RestASPNet.Controllers.Model.Context;
+using RestASPNet.Model.Base;
+using RestASPNet.Model.Context;
 
 namespace RestASPNet.Repositories.Impl
 {

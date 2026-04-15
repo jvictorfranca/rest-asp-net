@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RestASPNet.Model;
 
-namespace RestASPNet.Controllers.Model.Context
+namespace RestASPNet.Model.Context
 {
     public class MSSQLContext : DbContext
     {

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using RestASPNet.Controllers.Model;
 using RestASPNet.Data.Converter.Impl;
 using RestASPNet.Data.DTO.V1;
+using RestASPNet.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;

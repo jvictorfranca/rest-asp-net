@@ -1,5 +1,5 @@
 ﻿using RestASPNet.Controllers.Model;
-using RestASPNet.Controllers.Model.Base;
+using RestASPNet.Model.Base;
 
 namespace RestASPNet.Repositories
 {

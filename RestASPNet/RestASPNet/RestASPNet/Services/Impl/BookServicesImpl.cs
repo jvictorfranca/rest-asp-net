@@ -1,6 +1,6 @@
 ﻿using Mapster;
-using RestASPNet.Controllers.Model;
 using RestASPNet.Data.DTO.V1;
+using RestASPNet.Model;
 using RestASPNet.OldFiles.Repositories;
 using RestASPNet.Repositories;
 using RestASPNet.Repositories.Impl;

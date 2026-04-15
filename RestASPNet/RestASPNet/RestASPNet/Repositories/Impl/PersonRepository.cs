@@ -1,6 +1,6 @@
-﻿using RestASPNet.Controllers.Model;
-using RestASPNet.Controllers.Model.Context;
-using RestASPNet.Hypermedia.Utils;
+﻿using RestASPNet.Hypermedia.Utils;
+using RestASPNet.Model;
+using RestASPNet.Model.Context;
 
 namespace RestASPNet.Repositories.Impl
 {

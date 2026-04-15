@@ -1,6 +1,6 @@
-﻿using RestASPNet.Controllers.Model;
-using RestASPNet.Data.Converter.Impl;
+﻿using RestASPNet.Data.Converter.Impl;
 using RestASPNet.Data.DTO.V2;
+using RestASPNet.Model;
 using RestASPNet.Repositories;
 using RestASPNet.Repositories.Impl;
 

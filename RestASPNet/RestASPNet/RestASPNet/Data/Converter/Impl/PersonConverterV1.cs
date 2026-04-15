@@ -1,6 +1,6 @@
-﻿using RestASPNet.Controllers.Model;
-using RestASPNet.Data.Converter.Contract;
+﻿using RestASPNet.Data.Converter.Contract;
 using RestASPNet.Data.DTO.V1;
+using RestASPNet.Model;
 
 namespace RestASPNet.Data.Converter.Impl
 {

@@ -1,7 +1,7 @@
 ﻿using RestASPNet.Hypermedia.Abstract;
 using System.Xml.Serialization;
 
-namespace RestASPNet.Controllers.Model
+namespace RestASPNet.Model
 {
     public class FilterItem
     {

@@ -1,4 +1,4 @@
-﻿using RestASPNet.Controllers.Model;
+﻿using RestASPNet.Model;
 
 
 namespace RestASPNet.Repositories

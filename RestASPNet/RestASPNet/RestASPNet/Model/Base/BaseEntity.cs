@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace RestASPNet.Controllers.Model.Base
+namespace RestASPNet.Model.Base
 {
     public class BaseEntity
     {

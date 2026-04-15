@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using RestASPNet.Controllers.Model.Context;
 using Microsoft.Extensions.DependencyInjection;
+using RestASPNet.Model.Context;
 
 namespace RestASPNet.Tests.IntegrationTests.Tools
 {

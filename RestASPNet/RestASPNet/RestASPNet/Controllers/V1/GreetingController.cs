@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using RestASPNet.Controllers.Model;
+using RestASPNet.Model;
 using System.Net.Security;
 using System.Runtime.CompilerServices;
 
