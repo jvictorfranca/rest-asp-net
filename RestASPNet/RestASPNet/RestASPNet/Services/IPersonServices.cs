@@ -16,5 +16,7 @@ namespace RestASPNet.Services
         List<PersonDTO> FindByName(string firstName, string lastName);
 
         PagedSearchDTO<PersonDTO> FindWithPagedSearch(string name, string sortDirection, int pageSize, int page);
+
+        Task<List<PersonDTO>> MassCreationAsync<T>(IFormFile file);
     }
 }
