@@ -23,10 +23,9 @@ namespace RestASPNet.Model.Files.Importers.Factory
             {
                 var person = new PersonDTO
                 {
-                    Id = record.Id,
                     FirstName = record.first_name,
                     LastName = record.last_name,
-                    Adress = record.adress,
+                    Adress = record.address,
                     Gender = record.gender,
                     Enabled = true,
                 };

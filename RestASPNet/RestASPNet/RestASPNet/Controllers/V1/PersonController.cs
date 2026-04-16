@@ -130,5 +130,32 @@ namespace RestASPNet.Controllers.V1
             _logger.LogDebug("Person with ID {id} disabled successfully", id);
             return Ok(disabledPerson);
         }
+
+        [HttpPost("massCreation", Name = "MassCreatePersons")]
+        [ProducesResponseType(200, Type = typeof(List<PersonDTO>))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public async Task<IActionResult> MassCreate([FromForm] FileUploadDTO input)
+        {
+            var file = input.File;
+            _logger.LogInformation("Creating multiple persons");
+  
+            if (file == null || file.Length == 0)
+            {
+                _logger.LogError("No file provided for mass creation");
+                return BadRequest();
+            }
+
+            var createdPersons = await _personServices.MassCreationAsync<List<PersonDTO>>(file);
+            if (createdPersons == null)
+            {
+                _logger.LogError("Failed to create persons from file");
+                return BadRequest();
+            }
+
+            _logger.LogInformation("Successfully created {count} persons from file", createdPersons.Count);
+
+            return Ok(createdPersons);
+        }
     }
 }
