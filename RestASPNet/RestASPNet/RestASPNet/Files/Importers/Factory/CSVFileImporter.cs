@@ -1,9 +1,9 @@
 ﻿using CsvHelper.Configuration;
 using RestASPNet.Data.DTO.V1;
-using RestASPNet.Model.Files.Importers.Contract;
+using RestASPNet.Files.Importers.Contract;
 using System.Globalization;
 
-namespace RestASPNet.Model.Files.Importers.Factory
+namespace RestASPNet.Files.Importers.Factory
 {
     internal class CSVFileImporter : IFileImporter
     {

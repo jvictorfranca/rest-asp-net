@@ -4,7 +4,8 @@ using RestASPNet.Repositories;
 using RestASPNet.Services.Impl;
 using RestASPNet.Repositories.Impl;
 using RestASPNet.Hypermedia.Filters;
-using RestASPNet.Model.Files.Importers.Factory;
+using RestASPNet.Files.Importers.Factory;
+using RestASPNet.Files.Exporters.Factory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,11 @@ builder.Services.AddScoped<PersonServicesImplV2>();
 builder.Services.AddScoped<CSVFileImporter>();
 builder.Services.AddScoped<XlsxFileImporter>();
 builder.Services.AddScoped<FileImporterFactory>();
+
+
+builder.Services.AddScoped<CsvExporter>();
+builder.Services.AddScoped<XlsxExporter>();
+builder.Services.AddScoped<FileExporterFactory>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IFileServices, FileServicesImpl>();

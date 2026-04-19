@@ -1,8 +1,8 @@
 ﻿using ClosedXML.Excel;
 using RestASPNet.Data.DTO.V1;
-using RestASPNet.Model.Files.Importers.Contract;
+using RestASPNet.Files.Importers.Contract;
 
-namespace RestASPNet.Model.Files.Importers.Factory
+namespace RestASPNet.Files.Importers.Factory
 {
     internal class XlsxFileImporter : IFileImporter
     {

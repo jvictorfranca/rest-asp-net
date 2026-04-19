@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RestASPNet.Data.DTO.V1;
+using RestASPNet.Files.Exporters.Factory;
 using RestASPNet.Hypermedia.Utils;
 using RestASPNet.Services;
 
@@ -22,7 +23,7 @@ namespace RestASPNet.Controllers.V1
         }
 
         //{baseUrl/api/person/v1/{sortDirection}/{pageSize}/{page}?name=Leo
-        [HttpGet("{sortDirection}/{pageSize}/{page}", Name ="GetAllPersons")]
+        [HttpGet("{sortDirection}/{pageSize}/{page}", Name = "GetAllPersons")]
         [ProducesResponseType(200, Type = typeof(PagedSearchDTO<PersonDTO>))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -51,7 +52,7 @@ namespace RestASPNet.Controllers.V1
             return Ok(_personServices.FindByName(firstName, lastName));
         }
 
-        [HttpGet("{id}", Name ="GetPersonById")]
+        [HttpGet("{id}", Name = "GetPersonById")]
         [ProducesResponseType(200, Type = typeof(PersonDTO))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -87,7 +88,7 @@ namespace RestASPNet.Controllers.V1
             return Ok(createdPerson);
         }
 
-        [HttpPut(Name ="UpdatePerson")]
+        [HttpPut(Name = "UpdatePerson")]
         [ProducesResponseType(200, Type = typeof(PersonDTO))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -104,7 +105,7 @@ namespace RestASPNet.Controllers.V1
             return Ok(createdPerson);
         }
 
-        [HttpDelete("{id}", Name ="DeletePerson")]
+        [HttpDelete("{id}", Name = "DeletePerson")]
         [ProducesResponseType(204, Type = typeof(PersonDTO))]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -115,7 +116,7 @@ namespace RestASPNet.Controllers.V1
             return NoContent();
         }
 
-        [HttpPatch("{id}", Name ="DisablePerson")]
+        [HttpPatch("{id}", Name = "DisablePerson")]
         [ProducesResponseType(200, Type = typeof(PersonDTO))]
         [ProducesResponseType(400)]
         public IActionResult Disable(long id)
@@ -139,7 +140,7 @@ namespace RestASPNet.Controllers.V1
         {
             var file = input.File;
             _logger.LogInformation("Creating multiple persons");
-  
+
             if (file == null || file.Length == 0)
             {
                 _logger.LogError("No file provided for mass creation");
@@ -156,6 +157,50 @@ namespace RestASPNet.Controllers.V1
             _logger.LogInformation("Successfully created {count} persons from file", createdPersons.Count);
 
             return Ok(createdPersons);
+        }
+
+        [HttpGet("exportPage/{sortDirection}/{pagesize}/{page}", Name = "ExportPersonsPage")]
+        [ProducesResponseType(200, Type = typeof(FileContentResult))]
+        [ProducesResponseTypeAttribute(400)]
+        [ProducesResponseType(401)]
+        [Produces(MediaTypes.ApplicationXlsx, MediaTypes.ApplicationCsv)]
+        public IActionResult ExportPage(
+            string sortDirection,
+            int pageSize,
+            int page,
+            [FromQuery] string? name = "")
+        {
+            _logger.LogInformation("Exporting page {page} of persons with sort direction {sortDirection} and name filter {name}", page, sortDirection, name);
+
+            var acceptHeader = Request.Headers["Accept"].ToString();
+            try
+            {
+                if (string.IsNullOrEmpty(acceptHeader))
+                {
+                    _logger.LogError("No Accept header provided for export");
+                    return BadRequest("Accept header is required for export");
+                }
+
+                var fileResult = _personServices.ExportPage(page, pageSize, sortDirection, acceptHeader, name);
+                if (fileResult == null)
+                {
+                    _logger.LogError("Failed to export persons for page {page}", page);
+                    return BadRequest();
+                }
+                _logger.LogInformation("Successfully exported page {page} of persons", page);
+                return fileResult;
+            }
+
+            catch (NotSupportedException ex)
+            {
+                _logger.LogError(ex, "Unsupported export format requested: {acceptHeader}", acceptHeader);
+                return StatusCode(StatusCodes.Status415UnsupportedMediaType, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while exporting page {page} of persons", page);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using RestASPNet.Model.Files.Importers.Contract;
+﻿using RestASPNet.Files.Importers.Contract;
 
-namespace RestASPNet.Model.Files.Importers.Factory
+namespace RestASPNet.Files.Importers.Factory
 {
     public class FileImporterFactory
     {

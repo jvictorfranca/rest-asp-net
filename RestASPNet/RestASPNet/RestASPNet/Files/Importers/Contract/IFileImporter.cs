@@ -1,6 +1,6 @@
 ﻿using RestASPNet.Data.DTO.V1;
 
-namespace RestASPNet.Model.Files.Importers.Contract
+namespace RestASPNet.Files.Importers.Contract
 {
     public interface IFileImporter
     {

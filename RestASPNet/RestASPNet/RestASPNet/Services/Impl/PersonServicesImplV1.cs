@@ -1,10 +1,12 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Mvc;
 using RestASPNet.Controllers.Model;
 using RestASPNet.Data.Converter.Impl;
 using RestASPNet.Data.DTO.V1;
+using RestASPNet.Files.Exporters.Factory;
+using RestASPNet.Files.Importers.Factory;
 using RestASPNet.Hypermedia.Utils;
 using RestASPNet.Model;
-using RestASPNet.Model.Files.Importers.Factory;
 using RestASPNet.Repositories;
 
 // This implementation uses the manual converter, and not the mapster library, as in bookservices for example
@@ -16,13 +18,15 @@ namespace RestASPNet.Services.Impl
         private readonly IPersonRepository _repository;
         private readonly PersonConverterV1 _converter;
         private readonly FileImporterFactory _fileImportFactory;
+        private readonly FileExporterFactory _fileExporterFactory;
         private readonly ILogger<PersonServicesImplV1> _logger;
 
-        public PersonServicesImplV1(IPersonRepository repository, FileImporterFactory fileImporterFactory, ILogger<PersonServicesImplV1> logger)
+        public PersonServicesImplV1(IPersonRepository repository, FileImporterFactory fileImporterFactory, FileExporterFactory fileExporterFactory, ILogger<PersonServicesImplV1> logger)
         {
             _repository = repository;
             _converter = new PersonConverterV1();
             _fileImportFactory = fileImporterFactory;
+            _fileExporterFactory = fileExporterFactory;
             _logger = logger;
         }
 
@@ -99,6 +103,38 @@ namespace RestASPNet.Services.Impl
                 throw; // Re-throw the exception after logging it
 
             }
+        }
+
+        public FileContentResult ExportPage
+        (
+            int page,
+            int pageSize,
+            string sortDirection,
+            string acceptHeader,
+            string name
+        )
+        {
+            _logger.LogInformation("Exporting page {Page} with page size {PageSize}, sort direction {SortDirection}, accept header {AcceptHeader}, and name filter {Name}", page, pageSize, sortDirection, acceptHeader, name);
+            var content = FindWithPagedSearch(name, sortDirection, pageSize, page);
+
+
+            try
+            {
+
+                var exporter = _fileExporterFactory.GetExporter(acceptHeader);
+
+                var people = content.List.Adapt<List<PersonDTO>>();
+
+                return exporter.ExportFile(people);
+            }
+
+            catch (Exception ex) 
+            {
+                _logger.LogError(ex, "An error occurred during file export.");
+                throw;
+            }
+
+
         }
     }
 }
