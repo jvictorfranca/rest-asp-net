@@ -6,6 +6,7 @@ using RestASPNet.Repositories.Impl;
 using RestASPNet.Hypermedia.Filters;
 using RestASPNet.Files.Importers.Factory;
 using RestASPNet.Files.Exporters.Factory;
+using RestASPNet.Mail;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,9 @@ builder.Services.AddScoped<PersonServicesImplV2>();
 builder.Services.AddScoped<CSVFileImporter>();
 builder.Services.AddScoped<XlsxFileImporter>();
 builder.Services.AddScoped<FileImporterFactory>();
+
+builder.Services.AddScoped<IEmailService, EmailServiceImpl>();
+builder.Services.AddScoped<EmailSender>();
 
 
 builder.Services.AddScoped<CsvExporter>();
