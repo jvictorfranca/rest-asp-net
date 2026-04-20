@@ -10,6 +10,7 @@ namespace RestASPNet.Mail.Settings
         public string Password { get; set; }
         public string From { get; set; } = string.Empty;
         public string Message { get; set; }
+        public string Subject { get; set; }
         public bool Ssl { get; set; }
         public MailSettings Properties { get; set; } = new MailSettings();
 
