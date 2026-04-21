@@ -16,16 +16,44 @@ namespace RestASPNet.Services.Impl
             _logger = logger;
         }
 
-        public void SendSimpleEmail(string to, string subject, string body)
+        public void SendSimpleEmail(EmailRequestDTO emailRequest)
         {
-            _emailSender.To(to)
-                        .WithSubject(subject)
-                        .WithMessage(body)
+            _emailSender.To(emailRequest.To)
+                        .WithSubject(emailRequest.Subject)
+                        .WithMessage(emailRequest.Body)
                         .Send();
         }
-        public Task SendEmailWithAttachment(EmailRequestDTO emailRequest, IFormFile attachment)
+        public async Task SendEmailWithAttachment(EmailRequestDTO emailRequest, IFormFile attachment)
         {
-            throw new NotImplementedException();
+            if (attachment == null || attachment.Length == 0) { 
+            _logger.LogWarning("No attachment provided for email to {To}", emailRequest.To);
+                throw new ArgumentException("Attachment is null or empty");
+            }
+
+            string tempFilePath = Path.Combine(Path.GetTempPath(), attachment.FileName);
+
+            try
+            {
+                await using (var stream = new FileStream(tempFilePath, FileMode.Create))
+                {
+                    await attachment.CopyToAsync(stream);
+                }
+                    _emailSender.To(emailRequest.To)
+                                .WithSubject(emailRequest.Subject)
+                                .WithMessage(emailRequest.Body)
+                                .Attach(tempFilePath)
+                                .Send();
+            }
+            catch (Exception ex) 
+            { 
+            _logger.LogError(ex, "Failed to send email to {To} with attachment {FileName}", emailRequest.To, attachment.FileName);
+                throw;
+            }
+            finally
+            {
+                File.Delete(tempFilePath);
+            }
+
         }
     }
 }
