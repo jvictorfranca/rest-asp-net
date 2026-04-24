@@ -7,6 +7,9 @@ using RestASPNet.Hypermedia.Filters;
 using RestASPNet.Files.Importers.Factory;
 using RestASPNet.Files.Exporters.Factory;
 using RestASPNet.Mail;
+using RestASPNet.Auth.Config;
+using RestASPNet.Auth.Contract;
+using RestASPNet.Auth.Tools;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +36,7 @@ builder.Services.AddEmailConfiguration(builder.Configuration);
 
 builder.Services.AddDatabaseConfiguration(builder.Configuration);
 builder.Services.AddEvolveConfiguration(builder.Configuration, builder.Environment);
+builder.Services.AddAuthConfiguration(builder.Configuration);
 
 builder.Services.AddSingleton<MathService>();
 
@@ -55,7 +59,8 @@ builder.Services.AddScoped<IFileServices, FileServicesImpl>();
 
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IBookServices, BookServicesImpl>();
-
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPasswordHasher, Sha256PasswordHasher>();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
@@ -69,8 +74,10 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 app.UseRouting();
+app.UseAuthentication();
+
+app.UseAuthorization();
 //app.UseCorsConfiguration();
 app.UseCorsConfiguration( builder.Configuration);
 
