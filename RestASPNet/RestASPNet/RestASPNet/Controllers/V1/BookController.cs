@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RestASPNet.Data.DTO.V1;
 using RestASPNet.Services;
@@ -7,6 +8,7 @@ namespace RestASPNet.Controllers.V1
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize("Bearer")]
     public class BookController : ControllerBase
     {
         private readonly IBookServices _BookServices;

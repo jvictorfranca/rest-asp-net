@@ -1,4 +1,5 @@
 ﻿// using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RestASPNet.Data.DTO.V1;
@@ -11,6 +12,7 @@ namespace RestASPNet.Controllers.V1
     [ApiController]
     [Route("api/[controller]/v1")]
     // [EnableCors("LocalPolicy")] // For global CORS
+    [Authorize("Bearer")]
     public class PersonController : ControllerBase
     {
         private readonly IPersonServices _personServices;

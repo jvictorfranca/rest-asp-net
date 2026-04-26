@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestASPNet.Data.DTO.V1;
 using RestASPNet.Services;
 
@@ -7,6 +8,7 @@ namespace RestASPNet.Controllers.V1
     [ApiController]
     [Route("api/[controller]/v1")]
     // [EnableCors("LocalPolicy")] // For global CORS
+    [Authorize("Bearer")]
     public class EmailController : ControllerBase
     {
         private readonly IEmailService _emailService;

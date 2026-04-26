@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using RestASPNet.Model;
+using System.Security.Claims;
 
 namespace RestASPNet.Auth.Contract
 {

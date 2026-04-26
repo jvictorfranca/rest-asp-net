@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestASPNet.Data.DTO.V1;
 using RestASPNet.Services;
 
@@ -6,6 +7,7 @@ namespace RestASPNet.Controllers.V1
 {
     [ApiController]
     [Route("api/[controller]/v1")]
+    [Authorize("Bearer")]
     public class FileController : ControllerBase
     {
         private IFileServices _fileServices;
