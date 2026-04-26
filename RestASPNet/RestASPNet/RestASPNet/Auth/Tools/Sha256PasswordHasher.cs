@@ -13,7 +13,7 @@ namespace RestASPNet.Auth.Tools
         }
         public string Hash(string password)
         {
-            var inputBytes = System.Text.Encoding.UTF8.GetBytes(password);
+            var inputBytes = Encoding.UTF8.GetBytes(password);
             var hashedBytes = System.Security.Cryptography.SHA256.HashData(inputBytes);
 
             var builder = new StringBuilder();

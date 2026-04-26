@@ -3,6 +3,7 @@ using RestASPNet.Auth.Config;
 using RestASPNet.Auth.Contract;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace RestASPNet.Auth.Tools
@@ -59,7 +60,12 @@ namespace RestASPNet.Auth.Tools
 
         public string GenerateRefreshToken()
         {
-            throw new NotImplementedException();
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber);
+            }
         }
 
     }

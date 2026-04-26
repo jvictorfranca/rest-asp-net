@@ -8,7 +8,7 @@ namespace RestASPNet.Controllers.V1
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController: ControllerBase
+    public class AuthController : ControllerBase
     {
         private ILoginService _loginService;
         private readonly IUserAuthService _userAuthService;
@@ -34,4 +34,5 @@ namespace RestASPNet.Controllers.V1
             return Ok(token);
 
         }
+    }
 }
