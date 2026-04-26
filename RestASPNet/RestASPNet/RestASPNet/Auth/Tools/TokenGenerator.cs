@@ -1,0 +1,66 @@
+﻿using Microsoft.IdentityModel.Tokens;
+using RestASPNet.Auth.Config;
+using RestASPNet.Auth.Contract;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
+namespace RestASPNet.Auth.Tools
+{
+    public class TokenGenerator : ITokenGenerator
+    {
+
+        private readonly TokenConfiguration _configuration;
+
+        public TokenGenerator(TokenConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+        public string GenerateAccessToken(IEnumerable<Claim> claims)
+        {
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.Secret));
+
+            var signInCredentials = new SigningCredentials(
+                secretKey, SecurityAlgorithms.HmacSha256
+            );
+
+            var tokenOptions = new JwtSecurityToken(
+                issuer: _configuration.Issuer,
+                audience: _configuration.Audience,
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(_configuration.Minutes),
+                signingCredentials: signInCredentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        }
+        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.Secret)),
+                ValidateLifetime = false
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+
+            if(securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new SecurityTokenException("Invalid token");
+            }
+
+            return principal;
+        }
+
+        public string GenerateRefreshToken()
+        {
+            throw new NotImplementedException();
+        }
+
+    }
+}
