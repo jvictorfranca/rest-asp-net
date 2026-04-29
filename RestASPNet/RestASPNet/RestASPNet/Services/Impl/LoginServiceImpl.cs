@@ -3,6 +3,7 @@ using RestASPNet.Auth.Config;
 using RestASPNet.Auth.Contract;
 using RestASPNet.Data.DTO.V1;
 using RestASPNet.Model;
+using RestASPNet.Repositories;
 using System.Security.Claims;
 
 namespace RestASPNet.Services.Impl
@@ -42,15 +43,19 @@ namespace RestASPNet.Services.Impl
             if (user.RefreshToken != token.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now) { return null; }
             return GenerateToken(user, principal.Claims);
         }
-        public AccountCredentialDTO Create(AccountCredentialDTO user)
+        public AccountCredentialDTO Create(AccountCredentialDTO userDto)
         {
-            throw new NotImplementedException();
+            var user = _userauthService.Create(userDto);
+
+            return new AccountCredentialDTO
+            {
+                UserName = user.Username,
+                FullName = user.FullName,
+                Password = "*******"
+            };
+
         }
 
-        public bool RevokeToken(string username)
-        {
-            throw new NotImplementedException();
-        }
         private TokenDTO GenerateToken(User user, IEnumerable<Claim>? existingClaims = null)
         {
             var claims = existingClaims?.ToList() ?? new List<Claim>()
@@ -74,8 +79,10 @@ namespace RestASPNet.Services.Impl
             return new TokenDTO(true, createdDate,expirationDate,accessToken,refreshToken);
 
         }
-
-
+        public bool RevokeToken(string username)
+        {
+            return _userauthService.RevokeToken(username);
+        }
 
     }
 }

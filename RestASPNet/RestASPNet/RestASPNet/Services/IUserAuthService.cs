@@ -7,7 +7,8 @@ namespace RestASPNet.Services
     {
         User? FindByUsername(string username);
         User Create(AccountCredentialDTO accountCredentialDTO);
-        bool RevokeToken(string username);
         User Update(User user);
+
+        bool RevokeToken(string username);
     }
 }

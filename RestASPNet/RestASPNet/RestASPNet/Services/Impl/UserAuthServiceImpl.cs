@@ -41,8 +41,6 @@ namespace RestASPNet.Services.Impl
 
             return _repository.Create(user);
         }
-
-
         public bool RevokeToken(string username)
         {
             var user = _repository.FindByUsername(username);

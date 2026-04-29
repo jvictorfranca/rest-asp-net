@@ -50,9 +50,18 @@ namespace RestASPNet.Controllers.V1
         {
             var username = User.Identity.Name;
             if (string.IsNullOrEmpty(username)) { return BadRequest("Invalid client request"); }
-            var result = _userAuthService.RevokeToken(username);
+            var result = _loginService.RevokeToken(username);
             if(!result) { return BadRequest("Failed to revoke token"); }
             return NoContent();
+        }
+
+        [HttpPost("create", Name = "CreateUser")]
+        [AllowAnonymous]
+        public IActionResult Create([FromBody] AccountCredentialDTO user)
+        {
+            if (user == null) { return BadRequest("Invalid client request"); }
+            var result = _loginService.Create(user);
+            return Ok(result);
         }
     }
 }
