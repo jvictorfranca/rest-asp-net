@@ -34,5 +34,15 @@ namespace RestASPNet.Controllers.V1
             return Ok(token);
 
         }
+
+        [HttpPost("refresh", Name = "RefreshToken")]
+        [AllowAnonymous]
+        public IActionResult Refresh([FromBody] TokenDTO tokenDto)
+        {
+            if (tokenDto == null) { return BadRequest("Invalid client request"); }
+            var newToken = _loginService.ValidateCredentials(tokenDto);
+            if (newToken == null) { return Unauthorized(); }
+            return Ok(newToken);
+        }
     }
 }

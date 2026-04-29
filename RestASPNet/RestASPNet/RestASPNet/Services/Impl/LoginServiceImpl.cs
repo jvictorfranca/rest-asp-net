@@ -34,7 +34,13 @@ namespace RestASPNet.Services.Impl
 
         public TokenDTO? ValidateCredentials(TokenDTO token)
         {
-            throw new NotImplementedException();
+            var principal = _tokenService.GetPrincipalFromExpiredToken(token.AccessToken);
+            var username = principal.Identity?.Name;
+            if (username == null) { return null; }
+            var user = _userauthService.FindByUsername(username);
+            if (user == null) { return null; }
+            if (user.RefreshToken != token.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now) { return null; }
+            return GenerateToken(user, principal.Claims);
         }
         public AccountCredentialDTO Create(AccountCredentialDTO user)
         {
