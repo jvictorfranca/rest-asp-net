@@ -36,13 +36,23 @@ namespace RestASPNet.Controllers.V1
         }
 
         [HttpPost("refresh", Name = "RefreshToken")]
-        [AllowAnonymous]
         public IActionResult Refresh([FromBody] TokenDTO tokenDto)
         {
             if (tokenDto == null) { return BadRequest("Invalid client request"); }
             var newToken = _loginService.ValidateCredentials(tokenDto);
             if (newToken == null) { return Unauthorized(); }
             return Ok(newToken);
+        }
+
+        [HttpPost("revoke", Name = "RevokeToken")]
+        [Authorize]
+        public IActionResult Revoke()
+        {
+            var username = User.Identity.Name;
+            if (string.IsNullOrEmpty(username)) { return BadRequest("Invalid client request"); }
+            var result = _userAuthService.RevokeToken(username);
+            if(!result) { return BadRequest("Failed to revoke token"); }
+            return NoContent();
         }
     }
 }
