@@ -15,7 +15,7 @@ namespace RestASPNet.Tests.IntegrationTests.Person;
 [TestCaseOrderer("RestASPNet.Tests.IntegrationTests.Tools.PriorityOrder", "RestASPNet.Tests")]
 public class PersonControlerJsonIntegrationTests: IClassFixture<SQLServerFixture>
 {
-
+    private static TokenDTO? _token;
     private readonly HttpClient _httpClient;
     private static PersonDTO? _person;
 
@@ -29,6 +29,27 @@ public class PersonControlerJsonIntegrationTests: IClassFixture<SQLServerFixture
                 BaseAddress = new Uri("http://localhost")
             }
             );
+    }
+
+    [Fact(DisplayName = "0 - Sign in user should return token")]
+    [TestPriority(0)]
+    public async Task SignInUser_ShouldReturnToken()
+    {
+        // Arrange
+        var request = new UserDTO
+        {
+            UserName = "leandro",
+            Password = "admin123"
+        };
+        // Act
+        var response = await _httpClient.PostAsJsonAsync("/api/auth/signin", request);
+        // Assert
+        response.EnsureSuccessStatusCode();
+        var token = await response.Content.ReadFromJsonAsync<TokenDTO>();
+        token.Should().NotBeNull();
+        token.AccessToken.Should().NotBeNull();
+        token.RefreshToken.Should().NotBeNull();
+        _token = token;
     }
 
     [Fact(DisplayName = "01 - Create person with JSON")]
@@ -46,13 +67,14 @@ public class PersonControlerJsonIntegrationTests: IClassFixture<SQLServerFixture
             Enabled = true,
         };
 
+        _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
         // Act
         var response = await _httpClient.PostAsJsonAsync("/api/person/v1", request);
         // Assert
         response.EnsureSuccessStatusCode();
 
         var createdPerson = await response.Content.ReadFromJsonAsync<PersonDTO>();
-        createdPerson.Should().BeEquivalentTo(request, options => options.Excluding(x => x.Id));
+        createdPerson.Should().BeEquivalentTo(request, options => options.Excluding(x => x.Id).Excluding(x => x.Links));
 
         _person = createdPerson;
     }
@@ -73,6 +95,8 @@ public class PersonControlerJsonIntegrationTests: IClassFixture<SQLServerFixture
             Enabled = true,
         };
 
+        _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
+
         // Act
         var response = await _httpClient.PutAsJsonAsync("/api/person/v1", request);
         // Assert
@@ -86,6 +110,9 @@ public class PersonControlerJsonIntegrationTests: IClassFixture<SQLServerFixture
     [TestPriority(3)]
     public async Task DisablePePersonById_ShouldReturnDisabledPerson()
     {
+        // Arrange
+        _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
+
         // Act
         var response = await _httpClient.PatchAsync($"/api/person/v1/{_person.Id}", null);
         // Assert
@@ -97,7 +124,10 @@ public class PersonControlerJsonIntegrationTests: IClassFixture<SQLServerFixture
     [Fact(DisplayName = "04 - Find person by Id with JSON should work ")]
     [TestPriority(4)]
     public async Task FindPePersonById_ShouldReturnDisabledPerson()
-    { 
+    {
+        // Arrange
+        _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
+
         // Act
         var response = await _httpClient.GetAsync($"/api/person/v1/{_person.Id}");
         // Assert
@@ -112,7 +142,10 @@ public class PersonControlerJsonIntegrationTests: IClassFixture<SQLServerFixture
     [Fact(DisplayName = "05 - Delete person by Id with JSON should work ")]
     [TestPriority(5)]
     public async Task DeletePePersonById_ShouldSuccess()
-    { 
+    {
+        // Arrange
+        _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
+
         // Act
         var response = await _httpClient.DeleteAsync($"/api/person/v1/{_person.Id}");
         // Assert
@@ -123,6 +156,9 @@ public class PersonControlerJsonIntegrationTests: IClassFixture<SQLServerFixture
     [TestPriority(6)]
     public async Task FindAllPePersons_ShouldSuccess()
     {
+        // Arrange
+        _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
+
         // Act
         var response = await _httpClient.GetAsync("/api/person/v1/asc/10/1");
         // Assert
