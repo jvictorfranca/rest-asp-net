@@ -12,7 +12,7 @@ namespace RestASPNet.Tests.IntegrationTests.HATEOAS
     [TestCaseOrderer(TestConfigs.TestCaseOrderFullName, TestConfigs.TestCaseOrderAssembly)]
     public class PersonControllerHateoasTest : IClassFixture<SQLServerFixture>
     {
-
+        private static TokenDTO? _token;
         private readonly HttpClient _httpClient;
         private static PersonDTO? _person;
 
@@ -34,6 +34,27 @@ namespace RestASPNet.Tests.IntegrationTests.HATEOAS
             Regex.IsMatch(content, pattern).Should().BeTrue($"Link with rel='{rel}' should exist and have valid href");
         }
 
+        [Fact(DisplayName = "0 - Sign in user should return token")]
+        [TestPriority(0)]
+        public async Task SignInUser_ShouldReturnToken()
+        {
+            // Arrange
+            var request = new UserDTO
+            {
+                UserName = "leandro",
+                Password = "admin123"
+            };
+            // Act
+            var response = await _httpClient.PostAsJsonAsync("/api/auth/signin", request);
+            // Assert
+            response.EnsureSuccessStatusCode();
+            var token = await response.Content.ReadFromJsonAsync<TokenDTO>();
+            token.Should().NotBeNull();
+            token.AccessToken.Should().NotBeNull();
+            token.RefreshToken.Should().NotBeNull();
+            _token = token;
+        }
+
         [Fact(DisplayName = "01 - Create person should contain HATEOAS links")]
         [TestPriority(1)]
         public async Task Test01_CreatePersonShouldContainHATEOASLinks()
@@ -47,6 +68,10 @@ namespace RestASPNet.Tests.IntegrationTests.HATEOAS
                 Gender = "Male",
                 Enabled = true,
             };
+
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
+
+            // Act
 
             var response = await _httpClient.PostAsJsonAsync("/api/person/v1", request);
             response.EnsureSuccessStatusCode();
@@ -64,11 +89,18 @@ namespace RestASPNet.Tests.IntegrationTests.HATEOAS
         [TestPriority(2)]
         public async Task Test02_GetPersonByIdShouldContainHATEOASLinks()
         {
+            // Arrange
+
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
+
             var personResponse = await _httpClient.GetAsync($"/api/person/v1/1");
             personResponse.EnsureSuccessStatusCode();
             PersonDTO? person = await personResponse.Content.ReadFromJsonAsync<PersonDTO>();
             person.LastName = "Updated HATEOAS Test";
             person.Links = null;
+
+            // Act
+
             var response = await _httpClient.PutAsJsonAsync("/api/person/v1", person);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -83,11 +115,19 @@ namespace RestASPNet.Tests.IntegrationTests.HATEOAS
         [TestPriority(3)]
         public async Task Test03_DisablePersonById()
         {
+
+            // Arrange
+
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
+
             var personResponse = await _httpClient.GetAsync($"/api/person/v1/1");
             personResponse.EnsureSuccessStatusCode();
             PersonDTO? person = await personResponse.Content.ReadFromJsonAsync<PersonDTO>();
             person.Enabled = true;
             person.Links = null;
+
+            // Act
+
             var responsePut = await _httpClient.PutAsJsonAsync("/api/person/v1", person);
             responsePut.EnsureSuccessStatusCode();
 
@@ -105,6 +145,12 @@ namespace RestASPNet.Tests.IntegrationTests.HATEOAS
         [TestPriority(4)]
         public async Task Test04_GetPersonById()
         {
+            // Arrange
+
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
+
+            // Act
+
             var response = await _httpClient.GetAsync($"/api/person/v1/1");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -119,6 +165,10 @@ namespace RestASPNet.Tests.IntegrationTests.HATEOAS
         [TestPriority(5)]
         public async Task Test05_GetAllPersons()
         {
+
+            // Arrange
+
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
             // ---------------------------
             // Act
             // ---------------------------

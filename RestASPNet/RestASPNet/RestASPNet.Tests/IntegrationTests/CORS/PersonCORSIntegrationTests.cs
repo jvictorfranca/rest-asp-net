@@ -14,7 +14,7 @@ namespace RestASPNet.Tests.IntegrationTests.CORS
     [TestCaseOrderer("RestASPNet.Tests.IntegrationTests.Tools.PriorityOrder", "RestASPNet.Tests")]
     public class PersonCORSIntegrationTests : IClassFixture<SQLServerFixture>
     {
-
+        private static TokenDTO? _token;
         private readonly HttpClient _httpClient;
         private static PersonDTO? _person;
 
@@ -36,6 +36,27 @@ namespace RestASPNet.Tests.IntegrationTests.CORS
             _httpClient.DefaultRequestHeaders.Add("Origin", origin);
         }
 
+        [Fact(DisplayName = "0 - Sign in user should return token")]
+        [TestPriority(0)]
+        public async Task SignInUser_ShouldReturnToken()
+        {
+            // Arrange
+            var request = new UserDTO
+            {
+                UserName = "leandro",
+                Password = "admin123"
+            };
+            // Act
+            var response = await _httpClient.PostAsJsonAsync("/api/auth/signin", request);
+            // Assert
+            response.EnsureSuccessStatusCode();
+            var token = await response.Content.ReadFromJsonAsync<TokenDTO>();
+            token.Should().NotBeNull();
+            token.AccessToken.Should().NotBeNull();
+            token.RefreshToken.Should().NotBeNull();
+            _token = token;
+        }
+
         [Fact(DisplayName = "CORS - Create person with allowed Origin")]
         [TestPriority(1)]
 
@@ -50,7 +71,9 @@ namespace RestASPNet.Tests.IntegrationTests.CORS
                 Adress = "123 CORS St",
                 Gender = "Male",
             };
-            
+
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
+
             // Act
             var response = await _httpClient.PostAsJsonAsync("/api/person/v1", request);
             // Assert
@@ -78,6 +101,8 @@ namespace RestASPNet.Tests.IntegrationTests.CORS
                 Gender = "Male",
             };
 
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
+
             // Act
             var response = await _httpClient.PostAsJsonAsync("/api/person/v1", request);
             // Assert
@@ -95,6 +120,8 @@ namespace RestASPNet.Tests.IntegrationTests.CORS
             // Arrange
             AddOriginHeader("http://not-localhost:3000");
 
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
+
             // Act
             var response = await _httpClient.GetAsync("/api/person/v1/1");
             // Assert
@@ -111,6 +138,8 @@ namespace RestASPNet.Tests.IntegrationTests.CORS
         {
             // Arrange
             AddOriginHeader("http://localhost:3000");
+
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
 
             // Act
             var response = await _httpClient.GetAsync($"/api/person/v1/{_person.Id}");

@@ -16,7 +16,7 @@ namespace RestASPNet.Tests.IntegrationTests.Person;
 [TestCaseOrderer("RestASPNet.Tests.IntegrationTests.Tools.PriorityOrder", "RestASPNet.Tests")]
 public class PersonControlerXmlIntegrationTests : IClassFixture<SQLServerFixture>
 {
-
+    private static TokenDTO? _token;
     private readonly HttpClient _httpClient;
     private static PersonDTO? _person;
 
@@ -32,6 +32,27 @@ public class PersonControlerXmlIntegrationTests : IClassFixture<SQLServerFixture
             );
         _httpClient.DefaultRequestHeaders.Accept.Clear();
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
+    }
+
+    [Fact(DisplayName = "0 - Sign in user should return token")]
+    [TestPriority(0)]
+    public async Task SignInUser_ShouldReturnToken()
+    {
+        // Arrange
+        var request = new UserDTO
+        {
+            UserName = "leandro",
+            Password = "admin123"
+        };
+        // Act
+        var response = await _httpClient.PostAsJsonAsync("/api/auth/signin", request);
+        // Assert
+        response.EnsureSuccessStatusCode();
+        var token = await response.Content.ReadFromJsonAsync<TokenDTO>();
+        token.Should().NotBeNull();
+        token.AccessToken.Should().NotBeNull();
+        token.RefreshToken.Should().NotBeNull();
+        _token = token;
     }
 
     [Fact(DisplayName = "01 - Create person with JSON")]
