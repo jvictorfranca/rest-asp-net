@@ -2,6 +2,7 @@
 {
     public class TokenDTO
     {
+        public TokenDTO() { }
         public TokenDTO(bool authenticated,
             string created,
             string expiration,

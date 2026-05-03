@@ -1,14 +1,9 @@
 ﻿using FluentAssertions;
-using Renci.SshNet.Sftp;
 using RestASPNet.Data.DTO.V1;
 using RestASPNet.Hypermedia.Utils;
 using RestASPNet.Tests.IntegrationTests.Tools;
-using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text;
+
 
 
 namespace RestASPNet.Tests.IntegrationTests.Person;
@@ -44,11 +39,16 @@ public class PersonControlerXmlIntegrationTests : IClassFixture<SQLServerFixture
             UserName = "leandro",
             Password = "admin123"
         };
+
+        var content = XmlHelper.SerializeToXml(request);
         // Act
-        var response = await _httpClient.PostAsJsonAsync("/api/auth/signin", request);
+        var response = await _httpClient.PostAsync("/api/auth/signin", content);
         // Assert
+
         response.EnsureSuccessStatusCode();
-        var token = await response.Content.ReadFromJsonAsync<TokenDTO>();
+
+
+        var token = await XmlHelper.DeserializeFromXmlAsync<TokenDTO>(response);
         token.Should().NotBeNull();
         token.AccessToken.Should().NotBeNull();
         token.RefreshToken.Should().NotBeNull();
@@ -69,6 +69,8 @@ public class PersonControlerXmlIntegrationTests : IClassFixture<SQLServerFixture
             Gender = "Male",
             Enabled = true,
         };
+
+        _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
 
         // Act
         var response = await _httpClient.PostAsync("/api/person/v1", XmlHelper.SerializeToXml(request));
@@ -97,6 +99,8 @@ public class PersonControlerXmlIntegrationTests : IClassFixture<SQLServerFixture
             Enabled = true,
         };
 
+        _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
+
         // Act
         var response = await _httpClient.PutAsync("/api/person/v1", XmlHelper.SerializeToXml(request));
         // Assert
@@ -110,6 +114,9 @@ public class PersonControlerXmlIntegrationTests : IClassFixture<SQLServerFixture
     [TestPriority(3)]
     public async Task DisablePePersonById_ShouldReturnDisabledPerson()
     {
+        // Arrange
+        _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
+
         // Act
         var response = await _httpClient.PatchAsync($"/api/person/v1/{_person.Id}", null);
         // Assert
@@ -136,7 +143,10 @@ public class PersonControlerXmlIntegrationTests : IClassFixture<SQLServerFixture
     [Fact(DisplayName = "05 - Delete person by Id with JSON should work ")]
     [TestPriority(5)]
     public async Task DeletePePersonById_ShouldSuccess()
-    { 
+    {
+        // Arrange
+        _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
+
         // Act
         var response = await _httpClient.DeleteAsync($"/api/person/v1/{_person.Id}");
         // Assert
@@ -147,6 +157,9 @@ public class PersonControlerXmlIntegrationTests : IClassFixture<SQLServerFixture
     [TestPriority(6)]
     public async Task FindAllPePersons_ShouldSuccess()
     {
+
+        // Arrange
+        _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken);
 
         // Act
         var response = await _httpClient.GetAsync("/api/person/v1/asc/10/1");
