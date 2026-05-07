@@ -1,4 +1,7 @@
 <Solution>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
   <Project Path="RestASPNet.Tests/RestASPNet.Tests.csproj" Id="0c3f7056-caa1-4f9a-98eb-6d77e807a599" />
   <Project Path="RestASPNet/RestASPNet.csproj" />
 </Solution>

@@ -77,7 +77,12 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
+
 
 app.UseRouting();
 app.UseAuthentication();
@@ -92,4 +97,6 @@ app.UseHATEOASRoutes();
 app.UseSwaggerSpecification();
 app.UseScalarConfig();
 
-app.Run();
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+app.Run($"http://*:{port}");
+//app.Run();
