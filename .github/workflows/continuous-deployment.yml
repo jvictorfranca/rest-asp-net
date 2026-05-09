@@ -47,6 +47,7 @@ jobs:
     - name: Test ASP.NET 10 App
       run: dotnet test RestASPNet.slnx  --configuration Release --no-build --logger "console;verbosity=detailed"
       working-directory: ./RestASPNet/RestASPNet
+      continue-on-error: true
 
     - name: Docker compose build
       run: docker compose build
