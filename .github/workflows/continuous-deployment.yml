@@ -55,6 +55,6 @@ jobs:
 
     - name: Push to Docker hub
       run: |
-        docker tag ${{secrets.DOCKER_USERNAME}}/rest-asp-net:dev ${{secrets.DOCKER_USERNAME}}/rest-asp-net:${{github.run_id}}
+        docker tag ${{secrets.DOCKER_USERNAME}}/rest-asp-net:latest ${{secrets.DOCKER_USERNAME}}/rest-asp-net:${{github.run_id}}
         docker push ${{secrets.DOCKER_USERNAME}}/rest-asp-net:latest
         docker push ${{secrets.DOCKER_USERNAME}}/rest-asp-net:${{github.run_id}}
