@@ -37,15 +37,15 @@ jobs:
           dotnet-version: '10.0.x'
 
     - name: Restore Dependencies
-      run: dotnet restore RestASPNet.sln
+      run: dotnet restore RestASPNet.slnx
       working-directory: ./RestASPNet/RestASPNet
 
     - name: Build ASP.NET 10 App
-      run: dotnet build RestASPNet.sln --configuration Release --no-restore
+      run: dotnet build RestASPNet.slnx --configuration Release --no-restore
       working-directory: ./RestASPNet/RestASPNet
 
     - name: Test ASP.NET 10 App
-      run: dotnet test RestASPNet.sln  --configuration Release --no-build --logger "console;verbosity=detailed"
+      run: dotnet test RestASPNet.slnx  --configuration Release --no-build --logger "console;verbosity=detailed"
       working-directory: ./RestASPNet/RestASPNet
 
     - name: Docker compose build
