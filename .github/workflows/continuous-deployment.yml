@@ -38,16 +38,16 @@ jobs:
 
     - name: Restore Dependencies
       run: dotnet restore RestASPNet.sln
-      working-directory: ./RestAPSNet/RestASPNet
+      working-directory: ./RestASPNet/RestASPNet
 
     - name: Build ASP.NET 10 App
       run: dotnet build RestASPNet.sln --configuration Release --no-restore
-      working-directory: ./RestAPSNet/RestASPNet
+      working-directory: ./RestASPNet/RestASPNet
 
     - name: Test ASP.NET 10 App
       run: dotnet test RestASPNet.sln  --configuration Release --no-build --logger "console;verbosity=detailed"
-      working-directory: ./RestAPSNet/RestASPNet
+      working-directory: ./RestASPNet/RestASPNet
 
     - name: Docker compose build
       run: docker compose build
-      working-directory: ./RestAPSNet/RestASPNet
+      working-directory: ./RestASPNet/RestASPNet
