@@ -11,7 +11,7 @@ jobs:
     steps:
     - name: Create SQL Server Container
       run: |
-        docker run -d --name sql server_test \
+        docker run -d --name sqlserver_test \
           -e "ACCEPT_EULA=Y" \
           -e "MSSQL_SA_PASSWORD=YourStrong!Passw0rd" \
           -p 1433:1433 \
